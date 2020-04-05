@@ -1,0 +1,2 @@
+# Letshwit
+A homework scheduler
