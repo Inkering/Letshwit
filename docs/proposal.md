@@ -35,8 +35,8 @@ connections to computer architecture talked about there.
 
 ## References
 
-An overview of the A*
-algorithm:<https://theory.stanford.edu/~amitp/GameProgramming/AStarComparison.html>. This
+An overview of the A* algorithm:
+<https://theory.stanford.edu/~amitp/GameProgramming/AStarComparison.html>. This
 will help build our foundational knowledge on heuristic-based path finding.
 
 A heuristic-based approach to optimal path
