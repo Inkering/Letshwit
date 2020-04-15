@@ -1,0 +1,20 @@
+
+
+== generic notes ==
+
+
+generic algorithms! https://github.com/balcilar/TimeTabling-GeneticAlgorithm
+  - some system for changing the weights
+
+
+== data model/structures ==
+
+
+one to many relationship between classes and other stuff
+
+CSV of classes (include sleep and meals as classes)
+  - name of class (C-UUID), start/end datetimes (rounded to the closest half hour),
+CSV of ninja horus
+  - name of class (C-UUID), start/end timedates (rounded to the closest half hour), NINJA name
+CSV of assignments
+  - name of class (C-UUID), estimated time to complete, assignment description, due date
