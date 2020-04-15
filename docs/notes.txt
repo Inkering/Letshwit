@@ -19,9 +19,3 @@ CSV of ninja horus
   - name of class (C-UUID), start/end timedates (rounded to the closest half hour), NINJA name
 CSV of assignments
   - name of class (C-UUID), estimated time to complete, assignment description, due date
-
-
-== tasks ==
-
-
-1. do softdes evolutionary algorithm toolbox (https://sd2020spring.github.io/toolboxes/evolutionary-algorithms) [dieter and elias]

@@ -1,0 +1,5 @@
+
+== tasks ==
+
+
+1. do softdes evolutionary algorithm toolbox (https://sd2020spring.github.io/toolboxes/evolutionary-algorithms) [dieter and elias]
