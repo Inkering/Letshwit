@@ -1,10 +1,10 @@
 
-
-== generic notes ==
+== implementation notes ==
 
 
 generic algorithms! https://github.com/balcilar/TimeTabling-GeneticAlgorithm
-  - some system for changing the weights
+towardsdatascience: https://towardsdatascience.com/continuous-genetic-algorithm-from-scratch-with-python-ff29deedd099
+we need some method for changing the weights
 
 
 == data model/structures ==
