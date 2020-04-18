@@ -7,6 +7,11 @@ generic algorithms! https://github.com/balcilar/TimeTabling-GeneticAlgorithm
 towardsdatascience: https://towardsdatascience.com/continuous-genetic-algorithm-from-scratch-with-python-ff29deedd099
 we need some method for changing the weights
 
+how tf we're storing information?
+  discretize the entire week into 30 min chunks (2d array [interval x day])
+  preprocess all the classes and ninja hours into an occupancy grid --> basically if class is from 12-3 then the corresponding 30 min chunks in the array are flagged with some node object containing the class id metadata, etc
+  we can check if a time block is occupied / optimal by checking if A) the entry in the 2d array is empty and B) if the class id of the occupying object matches what we're looking for
+
 
 == data model/structures ==
 
