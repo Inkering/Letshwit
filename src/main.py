@@ -73,6 +73,9 @@ def fitness(soln, classes, n):
     elif cnt >= n:
         res -= cnt_weight*(cnt - n)
 
+    # during work hours is better (9-5)
+    res += sum(soln[8:16])
+
     return res
 
 
@@ -118,6 +121,8 @@ def run_algorithm(n):
     #how big to have the population be
     pop_size = 100
 
+    split = pop_size // 2
+    split_dec = split - 1
     # generate an initial population
     hw_pop = []
     for i in range(pop_size):
@@ -134,24 +139,25 @@ def run_algorithm(n):
     # within iteration number
     for i in range(n):
         # trim the list of bad solutions (last 5)
-        del hw_pop[-50:]
+        del hw_pop[-split:]
 
-        # breed 5 new individuals!
-        for i in range(50):
+        # breed new individuals!
+        for i in range(split):
             # select fitest individuals in ordered pairs
-            choice_p1 = random.randint(0,49)
-            choice_p2 = random.randint(0,49)
+            choice_p1 = random.randint(0,split_dec)
+            choice_p2 = random.randint(0,split_dec)
             while choice_p1 == choice_p2:
-                choice_p2 = random.randint(0,49)
+                choice_p2 = random.randint(0,split_dec)
 
-            p1 = hw_pop[random.randint(0, 49)]
-            p2 = hw_pop[random.randint(0, 49)]
+            p1 = hw_pop[random.randint(0,split_dec)]
+            p2 = hw_pop[random.randint(0,split_dec)]
 
             child = crossover(p1, p2, classes, hw_num)
 
             hw_pop.append(child)
 
         hw_pop.sort(key=operator.itemgetter('fitness'), reverse=True)
+        # print(hw_pop[0]["fitness"])
 
     print(hw_pop[0])
     print("classes  ",classes)
@@ -169,6 +175,6 @@ def run_algorithm(n):
     # print("class schedule", classes, len(classes), "hrs")
 
 if __name__ == "__main__":
-    run_algorithm(1000)
+    run_algorithm(100)
 
 
