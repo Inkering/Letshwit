@@ -38,3 +38,12 @@ class Assignment:
         self.duration = duration * NUM_BLOCKS
         self.desc = desc
         self.duedate = DAY_MAP.index(duedate)
+
+
+class TODO(Assignment):
+    """ The model for when to complete what homework assignment. """
+    def __init__(self, start, end, day, **akwargs):
+        self.start = start
+        self.end = end
+        self.day = day
+        super().__init__(**akwargs)

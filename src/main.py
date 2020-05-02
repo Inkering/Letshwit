@@ -16,6 +16,7 @@ rng = np.random.default_rng()
 CLASS_WEIGHT = 1
 HWCNT_WEIGHT = 1
 
+
 def load_classes(file_name):
     """
     load classes from a unique csv file in the data folder
