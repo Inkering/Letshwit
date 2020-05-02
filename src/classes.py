@@ -13,7 +13,7 @@ DAYS_PER_WEEK = 7
 DAY_MAP = ['S', 'U', 'M', 'T', 'W', 'R', 'F']
 
 
-class Class:
+class Course:
     """ Holds all the information about the class. """
     def __init__(self, name, start, end, days):
         self.uuid = name
