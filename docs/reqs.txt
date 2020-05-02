@@ -1,0 +1,30 @@
+== project description ==
+
+In this project, you will start with a problem of interest. You will then think
+about how to frame the problem and research different approaches that might be
+relevant. After designing an algorithm for your problem using the results from
+your research, you will implement and evaluate your approach through
+experiments. To conduct these experiments you will have to set the metrics of
+interest (runtime?, optimality?) and create a set of test instances.
+
+For either project option, students will submit two main deliverables. First,
+students will submit a written report. For theory-based projects, this will be
+the literature review starting with motivation and following based on your
+discoveries. For implementation-based projects, this report should detail
+background research, explain the final algorithm, and detail and interpret the
+results (similar to QMRI format).
+
+Second, students will submit a 5-10 minute video about their project. While the
+gist of the project motivation and results should be included, you can be as
+creative as you want with your presentation in the video.
+
+== rubric for assessment ==
+
+1. Motivation: Start with an interesting and appropriate application area, question, or problem and provide motivation behind studying it.
+2. Design:
+For theory-based, conduct a thorough and relevant literature review. For implementation-based, detail how the design process including any
+assumptions that are made and how relevant literature informs the
+process.
+3. Analysis: For theory-based, provide a synthesis of the results of your literature review that highlights the overall landscape. For implementation-based, validate your program using metrics and experiments and interpret the results.
+4. Report: Present and communicate about your decisions and results in a clear and precise manner.
+5. Video: Provide an engaging and informative video that highlights the students’ main take-aways from the project.
