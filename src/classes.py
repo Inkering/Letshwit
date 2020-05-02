@@ -42,8 +42,8 @@ class Assignment:
 
 class TODO(Assignment):
     """ The model for when to complete what homework assignment. """
-    def __init__(self, start, end, day, **akwargs):
+    def __init__(self, start, end, day, hw):
         self.start = start
         self.end = end
         self.day = day
-        super().__init__(**akwargs)
+        super().__init__(cname=hw.cname, duration=hw.duration, desc=hw.desc, duedate=hw.duedate)
