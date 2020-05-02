@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import random
+from classes import *
 
 
 def load_classes(file_name):
@@ -11,6 +12,10 @@ def load_classes(file_name):
     path = '../data/' + file_name
     data = pd.read_csv(path)
 
+    class_list = []
+
+    return class_list
+
 
 def load_ninja_hrs(file_name):
     """
@@ -20,6 +25,9 @@ def load_ninja_hrs(file_name):
     path = '../data/' + file_name
     data = pd.read_csv(path)
 
+    ninja_list = []
+    return ninja_list
+
 
 def load_homework(file_name):
     """
@@ -28,3 +36,6 @@ def load_homework(file_name):
     """
     path = '../data/' + file_name
     data = pd.read_csv(path)
+
+    homework_list = []
+    return homework_list
