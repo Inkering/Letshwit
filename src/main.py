@@ -12,37 +12,27 @@ import operator
 # makess dictionaries print nicer
 pp = pprint.PrettyPrinter(indent=4)
 
-# classes should be in the form [0.nth occupacy state...48]
+# random number generator
+rng = np.random.default_rng()
 
+
+# classes should be in the form [0.nth occupacy state...48]
 def gen_classes():
     """
     randomly generate a set of classes with times
     """
-    classes = []
-    for i in range(24):
-        p = random.random()
-        if p > 0.3:
-            classes.append(0)
-        else:
-            classes.append(1)
-    return classes
+    # classes have a 30% of happening
+    return rng.choice(2, 24, p=[0.7, 0.3]).tolist()
 
 
 def generate_rand_soln(hw_num):
     """
     randomly generate an individual set of hw schedulings
     """
-    # possible set of times to do hw in 24 1hr blocks
-    given_solution = []
-    cnt = 0
-    for i in range(24):
-        p = random.random()
-        if p > 0.6 and cnt != hw_num:
-            given_solution.append(1)
-            cnt += 1
-        else:
-            given_solution.append(0)
-    return given_solution
+    # we could force it to generate random solutions with a known
+    # number of homeworks, but that seems like cheating. plus it
+    # doesn't seem to actually make any difference
+    return rng.choice(2, 24).tolist()
 
 
 def fitness(soln, classes, n):
@@ -53,7 +43,7 @@ def fitness(soln, classes, n):
     n: number of homeworks
     """
     res = 0
-    cnt = 0
+    cnt = sum(soln) # the number of hw periods is the sum
 
     class_weight = 1
     cnt_weight = 1
@@ -61,20 +51,17 @@ def fitness(soln, classes, n):
     for i in range(len(soln)):
         # award non-collision between constraint set
         # and solution set
-        if classes[i] == 1 and classes[i] != soln[i]:
+        if classes[i] == 1 and soln[i] == 0:
             res += class_weight
         else:
-            res -= 1
-        if soln[i] == 1:
-            cnt += 1
+            res -= class_weight
 
     # score decreases more if further from num of hws
-    # in either polarity
-    if cnt < n:
-        res -= cnt_weight*(n - cnt)
-    elif cnt >= n:
-        res -= cnt_weight*(cnt - n)
-
+    # in either polarity. penalize if we don't do
+    # enough work or if we're doing too much (mental
+    # health is important)
+    res -= cnt_weight*abs(n-cnt)
+    
     # during work hours is better (9-5)
     res += sum(soln[8:16])
 
@@ -90,23 +77,33 @@ def crossover(p1, p2, classes, hw_num):
     hw_num: num of classes for fitness function
     return: dictionary with valid individual structure
     """
-    p1_cross = p1["indiv"][:12]
-    p2_cross = p2["indiv"][12:]
-    child_soln = p2_cross + p1_cross
-    # print("p1", p1_cross,"p2",p2_cross, "child", child_soln)
+    # single point crossover
+    # we only want one child, so we can either generate
+    # both and select one or randomly swap the parents
+    # so we don't know if we're choosing the first
+    # or second child
 
+    if random.random() < 0.5:
+        p1, p2 = p2, p1
 
-    # chance of mutation (swapping)
-    m_p = random.random()
-    if m_p > 0.3:
+    c_idx = random.randint(0, 23)
+    child_soln = p1["indiv"][:c_idx] + p2["indiv"][c_idx:]
+    
+    # 30% chance of mutation
+    # in this case, a mutation is just a swap of
+    # two random indices
+    if random.random() < 0.3:
         # random swap
         idx1 = random.randint(0,23)
         idx2 = random.randint(0,23)
 
         child_soln[idx1], child_soln[idx2] = child_soln[idx2], child_soln[idx1]
 
-    child = {"indiv" : child_soln,
-             "fitness" : fitness(child_soln, classes, hw_num)}
+    child = {
+        "indiv": child_soln,
+        "fitness": fitness(child_soln, classes, hw_num)
+    }
+
     return child
 
 
@@ -117,11 +114,11 @@ def run_algorithm(n):
     """
     classes = gen_classes()
 
-    # how many assignments do we  have to do today
+    # how many assignments do we have to do today
     hw_num = 4
 
     #how big to have the population be
-    pop_size = 100
+    pop_size = 10
 
     split = pop_size // 2
     split_dec = split - 1
