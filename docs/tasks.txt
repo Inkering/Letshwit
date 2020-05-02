@@ -10,10 +10,10 @@
 ✓ 5. csv importing for hw set (how do we go from (any homework period) to (specific hw))
 	6. finish crossover
   7. do fitness function
-    a) how many classes overlap with any of the TODOs
-    b) whether or not any of the TODOs come after the assigned due date
+    a) how many classes overlap with any of the TODOs [elias]
+    b) whether or not any of the TODOs come after the assigned due date [elias]
     c) whether or not any of the TODOs overlap
-    d) if any of the homework assignments are missing (multiple TODOs for an assignment)
+    d) if any of the homework assignments are missing (multiple TODOs for an assignment) [elias]
     e) if a TODO overlaps with NINJA hours
 	8. experimental design // runtime plotting
 	9. report writing
