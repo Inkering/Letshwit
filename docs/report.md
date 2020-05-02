@@ -33,7 +33,9 @@ concepts used in CPU scheduling. Timetabling is also a very defined homework spa
 
 We decided that segmenting our problem into discrete chunks would be the first step to solving it. Each day is divided into half-hour chunks which is the level of fidelity we are solving the problem at. We figured that this would be sufficient due to most classes (at Olin) fitting into roughly half-hour increments. It would also simplify mutating and crossing solutions in very defined list of temporal possibilities.
 
-Most implementations of genetic algorithms utilize list-based structures to assist in simplifying mutation and cross-ing functions. It also makes it easy to manipulate data structures when manipulating entire populations of information. Due to these considerations, we process the most basic time representation 
+Most implementations of genetic algorithms utilize list-based structures to assist in simplifying mutation and cross-ing functions. It also makes it easy to manipulate data structures when manipulating entire populations of information. Due to these considerations, we process the most basic time representation in the form of a single hour slot being filled one or zero.
+
+
 
 ## Examination & Results
 
