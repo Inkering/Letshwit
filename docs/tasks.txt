@@ -2,6 +2,15 @@
 == tasks ==
 
 
-✓ 1. do softdes evolutionary algorithm toolbox (https://sd2020spring.github.io/toolboxes/evolutionary-algorithms)
+✓ 1. do softdes evolutionary algorithm toolbox
+     (https://sd2020spring.github.io/toolboxes/evolutionary-algorithms)
 ✓ 2. make a simple genetic model for testing single-point crossover with 1 hour assignments and classes
-3. extend models to dynamic ranges (assignments > 1hr, classes > 1hr)
+  3. extend models to dynamic ranges (assignments > 1hr, classes > 1hr)
+  4. csv importing for classes
+	5. csv importing for hw set (how do we go from (any homework period) to
+	                                                  (specific hw))
+	6. consider due dates in fitness function
+	7. experimental design // runtime plotting
+	9. report writing
+	10. video writing/filming
+	
