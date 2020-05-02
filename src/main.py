@@ -8,62 +8,61 @@ import random
 import pprint
 import operator
 
-# for assorted terminal print outs,
-# makess dictionaries print nicer
-pp = pprint.PrettyPrinter(indent=4)
-
 # random number generator
 rng = np.random.default_rng()
 
+# tunable paramaters
+CLASS_WEIGHT = 1
+HWCNT_WEIGHT = 1
+NUM_BLOCKS = 2 # how many blocks per hour
+TIMEBLOCKS = 24 * NUM_BLOCKS
+
 
 # classes should be in the form [0.nth occupacy state...48]
-def gen_classes():
+def gen_rand_classes():
     """
     randomly generate a set of classes with times
     """
     # classes have a 30% of happening
-    return rng.choice(2, 24, p=[0.7, 0.3]).tolist()
+    return rng.choice(2, TIMEBLOCKS, p=[0.7, 0.3]).tolist()
 
 
-def generate_rand_soln(hw_num):
+def gen_rand_solution(hw_num):
     """
     randomly generate an individual set of hw schedulings
     """
     # we could force it to generate random solutions with a known
     # number of homeworks, but that seems like cheating. plus it
     # doesn't seem to actually make any difference
-    return rng.choice(2, 24).tolist()
+    return rng.choice(2, TIMEBLOCKS).tolist()
 
 
 def fitness(soln, classes, n):
     """
     Evaluate the fitness of a solution
-    soln: an solution set of size 24
+    soln: an solution set of size TIMEBLOCKS
     classes: when classes are
     n: number of homeworks
     """
     res = 0
     cnt = sum(soln) # the number of hw periods is the sum
 
-    class_weight = 1
-    cnt_weight = 1
-
     for i in range(len(soln)):
         # award non-collision between constraint set
         # and solution set
         if classes[i] == 1 and soln[i] == 0:
-            res += class_weight
+            res += CLASS_WEIGHT
         else:
-            res -= class_weight
+            res -= CLASS_WEIGHT
 
     # score decreases more if further from num of hws
     # in either polarity. penalize if we don't do
     # enough work or if we're doing too much (mental
     # health is important)
-    res -= cnt_weight*abs(n-cnt)
+    res -= HWCNT_WEIGHT*abs(n-cnt)
     
     # during work hours is better (9-5)
-    res += sum(soln[8:16])
+    res += sum(soln[8*NUM_BLOCKS:16*NUM_BLOCKS])
 
     return res
 
@@ -86,7 +85,7 @@ def crossover(p1, p2, classes, hw_num):
     if random.random() < 0.5:
         p1, p2 = p2, p1
 
-    c_idx = random.randint(0, 23)
+    c_idx = random.randint(0, TIMEBLOCKS-1)
     child_soln = p1["indiv"][:c_idx] + p2["indiv"][c_idx:]
     
     # 30% chance of mutation
@@ -94,8 +93,8 @@ def crossover(p1, p2, classes, hw_num):
     # two random indices
     if random.random() < 0.3:
         # random swap
-        idx1 = random.randint(0,23)
-        idx2 = random.randint(0,23)
+        idx1 = random.randint(0, TIMEBLOCKS-1)
+        idx2 = random.randint(0, TIMEBLOCKS-1)
 
         child_soln[idx1], child_soln[idx2] = child_soln[idx2], child_soln[idx1]
 
@@ -112,7 +111,7 @@ def run_algorithm(n):
     run the algorithm with given num of iterations
     n: number of iterations
     """
-    classes = gen_classes()
+    classes = gen_rand_classes()
 
     # how many assignments do we have to do today
     hw_num = 4
@@ -126,7 +125,7 @@ def run_algorithm(n):
     hw_pop = []
     for i in range(pop_size):
         # fill the populate at gen 0 with individuals
-        soln = generate_rand_soln(hw_num)
+        soln = gen_rand_solution(hw_num)
         individual = {"indiv" : soln,
                       "fitness": fitness(soln, classes, hw_num)}
 
@@ -145,6 +144,7 @@ def run_algorithm(n):
             # select fitest individuals in ordered pairs
             choice_p1 = random.randint(0,split_dec)
             choice_p2 = random.randint(0,split_dec)
+            
             while choice_p1 == choice_p2:
                 choice_p2 = random.randint(0,split_dec)
 
