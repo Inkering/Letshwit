@@ -12,6 +12,8 @@ import operator
 # makess dictionaries print nicer
 pp = pprint.PrettyPrinter(indent=4)
 
+# classes should be in the form [0.nth occupacy state...48]
+
 def gen_classes():
     """
     randomly generate a set of classes with times
