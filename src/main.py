@@ -15,6 +15,21 @@ pp = pprint.PrettyPrinter(indent=4)
 # random number generator
 rng = np.random.default_rng()
 
+def load_classes(file_name):
+    """
+    load classes from a unique csv file in the data folder
+    file_name: the name of the csv file
+    """
+    pass
+
+
+def load_homework(file_name):
+    """
+    load homework from a unique csv file in the data folder
+    file_name: the name of the csv file
+    """
+    pass
+
 
 # classes should be in the form [0.nth occupacy state...48]
 def gen_classes():
