@@ -14,3 +14,9 @@ Homeworks look like this
 | report          | TH  | ModSim  | 1     |
 | jupyternotebook | F   | SoftDes | 4     |
 | labreport       | F   | ISIM    | 3     |
+
+Ninja hours look like this
+
+| Class  | start-block | end-block | S | U | M | T | W | R | F | CUUID |
+| Dieter | 27          | 31        | 0 | 0 | 1 | 0 | 0 | 1 | 0 | 1     |
+| Elias  | 18          | 25        | 0 | 0 | 1 | 0 | 0 | 1 | 0 | 2     |
