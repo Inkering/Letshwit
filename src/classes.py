@@ -24,7 +24,7 @@ class Course:
         # self.occupancy_vector[(ov >= start and ov <= end) and ov >= (days*TIMEBLOCKS)]
 
 
-class NINJA(Class):
+class NINJA(Course):
     """ Holds all the information pertaining to NINJA hours. """
     def __init__(self, nname, **ckwargs):
         self.ninja = nname

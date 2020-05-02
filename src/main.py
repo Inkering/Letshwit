@@ -7,6 +7,7 @@ import numpy as np
 import random
 import pprint
 import operator
+from classes import *
 
 # random number generator
 rng = np.random.default_rng()
@@ -14,8 +15,6 @@ rng = np.random.default_rng()
 # tunable paramaters
 CLASS_WEIGHT = 1
 HWCNT_WEIGHT = 1
-NUM_BLOCKS = 2 # how many blocks per hour
-TIMEBLOCKS = 24 * NUM_BLOCKS
 
 def load_classes(file_name):
     """
