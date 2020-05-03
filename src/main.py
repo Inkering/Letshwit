@@ -40,6 +40,50 @@ def gen_rand_solution(hws):
     return soln
 
 
+def todo_overlap_fitness(soln):
+    """
+    Evaluate the fitness of the given solution based on:
+    - whether or not any of the TODOs overlap
+    """
+    delta = 0
+    return delta
+
+
+def todo_NINJA_fitness(soln):
+    """
+    Evaluate the fitness of the given solution based on:
+    - if a TODO overlaps with NINJA hours
+    """
+    delta = 0
+    return delta
+
+
+def todo_classes_overlap_fitness(soln):
+    """
+    Evaluate the fitness of the given solution based on:
+    - how many classes overlap with any of the TODOs
+    """
+    delta = 0
+    return delta
+
+
+def todo_duedate_fitness(soln):
+    """
+    Evaluate the fitness of the given solution based on:
+    - whether or not any of the TODOs come after the assigned due date
+    """
+    delta = 0
+    return delta
+
+def todo_hwcnt_fitness(soln):
+    """
+    Evaluate the fitness of the given solution based on:
+    -  if any of the homework assignments are missing (multiple TODOs for an assignment)
+    """
+    delta = 0
+    return delta
+
+
 def fitness(soln):
     """ Evaluates the fitness of the given solution in the overall fitness
     landscape. A solution's fitness is calculated based on:
