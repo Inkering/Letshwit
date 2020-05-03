@@ -15,7 +15,7 @@ import numpy    # Used for statistics
 from deap import algorithms
 from deap import base
 from deap import tools
-
+from Levenshtein import distance as levenshtein_distance
 
 # -----------------------------------------------------------------------------
 #  Global variables
@@ -88,8 +88,6 @@ class Message(list):
 # Genetic operators
 # -----------------------------------------------------------------------------
 
-# TODO: Implement levenshtein_distance function (see Day 9 in-class exercises)
-# HINT: Now would be a great time to implement memoization if you haven't.
 
 def evaluate_text(message, goal_text, verbose=VERBOSE):
     """Given a Message and a goal_text string, return the Levenshtein distance
@@ -113,17 +111,22 @@ def mutate_text(message, prob_ins=0.05, prob_del=0.05, prob_sub=0.05):
         Substitution:   Replace one character of the Message with a random
                         (legal) character
     """
+    message = message.get_text()
+    idx = random.randint(0, len(message)-1)
 
+    # insertion
     if random.random() < prob_ins:
-        # TODO: Implement insertion-type mutation
-        pass
+        message = message[:idx] + random.choice(VALID_CHARS) + message[idx:]
+    
+    # deletion
+    if random.random() < prob_del:
+        message = message[:idx] + message[idx+1:]
 
-    # TODO: Also implement deletion and substitution mutations
-    # HINT: Message objects inherit from list, so they also inherit
-    #       useful list methods
-    # HINT: You probably want to use the VALID_CHARS global variable
+    # substitution
+    if random.random() < prob_sub:
+        message = message[:idx] + random.choice(VALID_CHARS) + message[idx+1:]
 
-    return (message,)   # Length 1 tuple, required by DEAP
+    return (Message(starting_string=message),)   # Length 1 tuple, required by DEAP
 
 
 # -----------------------------------------------------------------------------
