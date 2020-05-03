@@ -15,22 +15,7 @@ rng = np.random.default_rng()
 # tunable paramaters
 CLASS_WEIGHT = 1
 HWCNT_WEIGHT = 1
-
-
-def load_classes(file_name):
-    """
-    load classes from a unique csv file in the data folder
-    file_name: the name of the csv file
-    """
-    pass
-
-
-def load_homework(file_name):
-    """
-    load homework from a unique csv file in the data folder
-    file_name: the name of the csv file
-    """
-    pass
+MUTATION_PROB = 0.3
 
 
 def gen_rand_solution(hws):
@@ -46,9 +31,8 @@ def gen_rand_solution(hws):
         # the random todo occurs on a random day at a
         # random time, but the duration remains the same
         start = np.random.randint(TIMEBLOCKS - hw.duration)
-        end = start + hw.duration
         day = np.random.randint(DAYS_PER_WEEK)
-        todo = TODO(start, end, day, hw)
+        todo = TODO(start, day, hw)
         
         soln.append(todo)
 
@@ -95,9 +79,17 @@ def crossover(p1, p2):
     # both and select one or randomly swap the parents
     # so we don't know if we're choosing the first
     # or second child
-
     if random.random() < 0.5:
         p1, p2 = p2, p1
+
+    idx = np.random.randint(len(p1))
+    child = p1[:idx] + p2[idx:]
+
+    # randomly mutate the solution with a given probability
+    if random.random() < MUTATION_PROB:
+        # pick two random tasks and mutate across their time ranges
+        ridx = rng.choice(len(child), 2, replace=False)
+        TODO.mutate_across(child[ridx[0]], child[ridx[1]])
 
     return child
 
