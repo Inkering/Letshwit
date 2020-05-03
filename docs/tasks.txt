@@ -8,7 +8,7 @@
 ✓ 3. extend models to dynamic ranges (assignments > 1hr, classes > 1hr
 ✓ 4. csv importing for classes
 ✓ 5. csv importing for hw set (how do we go from (any homework period) to (specific hw))
-	6. finish crossover
+✓ 6. finish crossover - single point crossover with random day and timerange mutation
   7. do fitness function
     a) how many classes overlap with any of the TODOs [elias]
     b) whether or not any of the TODOs come after the assigned due date [elias]
