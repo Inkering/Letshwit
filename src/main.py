@@ -17,31 +17,52 @@ CLASS_WEIGHT = 1
 HWCNT_WEIGHT = 1
 
 
-# classes should be in the form [0.nth occupacy state...48]
-def gen_rand_classes():
+def load_classes(file_name):
     """
-    randomly generate a set of classes with times
+    load classes from a unique csv file in the data folder
+    file_name: the name of the csv file
     """
-    # classes have a 30% of happening
-    return rng.choice(2, TIMEBLOCKS, p=[0.7, 0.3]).tolist()
+    pass
 
 
-def gen_rand_solution(hw_num):
+def load_homework(file_name):
     """
-    randomly generate an individual set of hw schedulings
+    load homework from a unique csv file in the data folder
+    file_name: the name of the csv file
     """
-    # we could force it to generate random solutions with a known
-    # number of homeworks, but that seems like cheating. plus it
-    # doesn't seem to actually make any difference
-    return rng.choice(2, TIMEBLOCKS).tolist()
+    pass
 
 
-def fitness(soln, classes, n):
+def gen_rand_solution(hws):
     """
-    Evaluate the fitness of a solution
-    soln: an solution set of size TIMEBLOCKS
-    classes: when classes are
-    n: number of homeworks
+    Generate a random solution for the scheduling problem, which is just
+    a list of n TODOs. The number of TODOs is always equal to the number
+    of homework assignments.
+    """
+    soln = []
+
+    # generate a random todo for each homework in the list
+    for hw in hws:
+        # the random todo occurs on a random day at a
+        # random time, but the duration remains the same
+        start = np.random.randint(TIMEBLOCKS - hw.duration)
+        end = start + hw.duration
+        day = np.random.randint(DAYS_PER_WEEK)
+        todo = TODO(start, end, day, hw)
+        
+        soln.append(todo)
+
+    return soln
+
+
+def fitness(soln):
+    """ Evaluates the fitness of the given solution in the overall fitness
+    landscape. A solution's fitness is calculated based on:
+        - how many classes overlap with any of the TODOs
+        - whether or not any of the TODOs come after the assigned due date,
+        - whether or not any of the TODOs overlap
+        - if any of the homework assignments are missing (multiple TODOs for an assignment)
+        - if a TODO overlaps with NINJA hours
     """
     res = 0
     cnt = sum(soln) # the number of hw periods is the sum
@@ -66,15 +87,9 @@ def fitness(soln, classes, n):
     return res
 
 
-def crossover(p1, p2, classes, hw_num):
-    """
-    breed two individuals together
-    p1: individual 1
-    p2: individual 2
-    classes: set of classes for fitness function
-    hw_num: num of classes for fitness function
-    return: dictionary with valid individual structure
-    """
+def crossover(p1, p2):
+    """ Breed two parent solutions together via single-point crossover,
+    randomly returning one of the two offspring. """
     # single point crossover
     # we only want one child, so we can either generate
     # both and select one or randomly swap the parents
@@ -83,24 +98,6 @@ def crossover(p1, p2, classes, hw_num):
 
     if random.random() < 0.5:
         p1, p2 = p2, p1
-
-    c_idx = random.randint(0, TIMEBLOCKS-1)
-    child_soln = p1["indiv"][:c_idx] + p2["indiv"][c_idx:]
-    
-    # 30% chance of mutation
-    # in this case, a mutation is just a swap of
-    # two random indices
-    if random.random() < 0.3:
-        # random swap
-        idx1 = random.randint(0, TIMEBLOCKS-1)
-        idx2 = random.randint(0, TIMEBLOCKS-1)
-
-        child_soln[idx1], child_soln[idx2] = child_soln[idx2], child_soln[idx1]
-
-    child = {
-        "indiv": child_soln,
-        "fitness": fitness(child_soln, classes, hw_num)
-    }
 
     return child
 

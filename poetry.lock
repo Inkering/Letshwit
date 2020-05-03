@@ -28,8 +28,19 @@ version = "0.12.0"
 [package.dependencies]
 setuptools = "*"
 
+[[package]]
+category = "main"
+description = "Pretty-print tabular data"
+name = "tabulate"
+optional = false
+python-versions = "*"
+version = "0.8.7"
+
+[package.extras]
+widechars = ["wcwidth"]
+
 [metadata]
-content-hash = "c7f805d619ac78b35c2a22f1c1b760fb0d7ccd26ddc006a98d74253a1a3dafba"
+content-hash = "9a08510ee23e7d918e4a33d418e310ca1f41b0b41347a47b20cbb89474df5e17"
 python-versions = "^3.8"
 
 [metadata.files]
@@ -84,4 +95,8 @@ numpy = [
 ]
 python-levenshtein = [
     {file = "python-Levenshtein-0.12.0.tar.gz", hash = "sha256:033a11de5e3d19ea25c9302d11224e1a1898fe5abd23c61c7c360c25195e3eb1"},
+]
+tabulate = [
+    {file = "tabulate-0.8.7-py3-none-any.whl", hash = "sha256:ac64cb76d53b1231d364babcd72abbb16855adac7de6665122f97b593f1eb2ba"},
+    {file = "tabulate-0.8.7.tar.gz", hash = "sha256:db2723a20d04bcda8522165c73eea7c300eda74e0ce852d9022e0159d7895007"},
 ]
