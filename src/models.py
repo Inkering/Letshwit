@@ -3,6 +3,8 @@ Objects for holding all separate and distinct data models.
 
 @authors: Elias and Dieter
 """
+
+
 class Course(Schedulable):
     """ Holds all the information about the class. """
 
@@ -33,9 +35,17 @@ class Assignment:
 class TODO(Assignment, Schedulable):
     """ The model for when to complete what homework assignment. """
 
-    def __init__(self, day, **kwargs, hw):
+    def __init__(self, start, day, hw):
         end = start + hw.duration
-        super().__init__(days=[day], end=end, cname=hw.cname, duration=hw.duration, desc=hw.desc, duedate=hw.due)
+        super().__init__(
+            start=start,
+            end=end,
+            days=[day],
+            cname=hw.cname,
+            duration=hw.duration,
+            desc=hw.desc,
+            duedate=hw.due,
+        )
 
     @property
     def day(self):
@@ -55,4 +65,4 @@ class TODO(Assignment, Schedulable):
         # swap and recalculate the respective time ranges
         t1.start, t2.start = t2.start, t1.start
         t1.end = t1.start + t1.duration
-        t2.end = t2.end + t2.duration 
+        t2.end = t2.end + t2.duration

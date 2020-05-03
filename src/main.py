@@ -7,7 +7,11 @@ import numpy as np
 import random
 import pprint
 import operator
-from classes import *
+
+from models import TODO
+from tunables import TIMEBLOCKS, DAYS_PER_WEEK, MUTATION_PROB
+from fitness import fitness
+
 
 # random number generator
 rng = np.random.default_rng()
@@ -35,8 +39,10 @@ def gen_rand_solution(hws):
 
 
 def crossover(p1, p2):
-    """ Breed two parent solutions together via single-point crossover,
-    randomly returning one of the two offspring. """
+    """
+    Breed two parent solutions together via single-point crossover,
+    randomly returning one of the two offspring.
+    """
     # single point crossover
     # we only want one child, so we can either generate
     # both and select one or randomly swap the parents
@@ -67,7 +73,7 @@ def run_algorithm(n):
     # how many assignments do we have to do today
     hw_num = 4
 
-    #how big to have the population be
+    # how big to have the population be
     pop_size = 10
 
     split = pop_size // 2
@@ -77,13 +83,12 @@ def run_algorithm(n):
     for i in range(pop_size):
         # fill the populate at gen 0 with individuals
         soln = gen_rand_solution(hw_num)
-        individual = {"indiv" : soln,
-                      "fitness": fitness(soln, classes, hw_num)}
+        individual = {"indiv": soln, "fitness": fitness(soln, classes, hw_num)}
 
         hw_pop.append(individual)
 
     # sort by fitness, sorted by descending
-    hw_pop.sort(key=operator.itemgetter('fitness'), reverse=True)
+    hw_pop.sort(key=operator.itemgetter("fitness"), reverse=True)
 
     # within iteration number
     for i in range(n):
@@ -93,24 +98,24 @@ def run_algorithm(n):
         # breed new individuals!
         for i in range(split):
             # select fitest individuals in ordered pairs
-            choice_p1 = random.randint(0,split_dec)
-            choice_p2 = random.randint(0,split_dec)
+            choice_p1 = random.randint(0, split_dec)
+            choice_p2 = random.randint(0, split_dec)
 
             while choice_p1 == choice_p2:
-                choice_p2 = random.randint(0,split_dec)
+                choice_p2 = random.randint(0, split_dec)
 
-            p1 = hw_pop[random.randint(0,split_dec)]
-            p2 = hw_pop[random.randint(0,split_dec)]
+            p1 = hw_pop[random.randint(0, split_dec)]
+            p2 = hw_pop[random.randint(0, split_dec)]
 
             child = crossover(p1, p2)
 
             hw_pop.append(child)
 
-        hw_pop.sort(key=operator.itemgetter('fitness'), reverse=True)
+        hw_pop.sort(key=operator.itemgetter("fitness"), reverse=True)
         # print(hw_pop[0]["fitness"])
 
     print(hw_pop[0])
-    print("classes  ",classes)
+    print("classes  ", classes)
 
     # highlight conflicts in solution
     output = hw_pop[0]["indiv"]
@@ -120,9 +125,10 @@ def run_algorithm(n):
         else:
             output[i] = 0
 
-    print("bad      ",output)
+    print("bad      ", output)
     # print("o hw  schedule", hw, len(hw), "hrs")
     # print("class schedule", classes, len(classes), "hrs")
+
 
 if __name__ == "__main__":
     run_algorithm(100)

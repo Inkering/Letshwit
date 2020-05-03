@@ -4,7 +4,7 @@ makes it easier than passing around a a dict or multiple variables to all of the
 
 @author: Elias and Dieter
 """
-from abc import ABC # Easy as 1-2-3!
+from abc import ABC  # Easy as 1-2-3!
 
 
 class Schedulable(ABC):
@@ -24,15 +24,17 @@ class Schedulable(ABC):
             for d2 in s2.days:
                 if d1 == d2:
                     # add the time overlap from the either side of the first event
-                    if s1.start <= s2.end: delta += s2.end - s1.start
-                    if s2.start <= s1.end: delta += s1.end - s2.start
+                    if s1.start <= s2.end:
+                        delta += s2.end - s1.start
+                    if s2.start <= s1.end:
+                        delta += s1.end - s2.start
 
         return delta
 
 
 class Schedule:
     """ Dummy structure for holding imported data. """
-    
+
     def __init__(self, classes, hours, assignments):
         self.classes = classes
         self.ninja_hours = hours

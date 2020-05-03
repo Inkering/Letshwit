@@ -4,7 +4,14 @@ A helper file containing all the functions related to fitness calculation.
 @authors: Elias and Dieter
 """
 from generics import Schedule, Schedulable
-from tunables import OVERLAP_WEIGHT, NINJA_WEIGHT, CLASS_WEIGHT, OVERDUE_WEIGHT, TIMEBLOCKS, HWCNT_WEIGHT
+from tunables import (
+    OVERLAP_WEIGHT,
+    NINJA_WEIGHT,
+    CLASS_WEIGHT,
+    OVERDUE_WEIGHT,
+    TIMEBLOCKS,
+    HWCNT_WEIGHT,
+)
 
 
 def overlap_fitness_comp(soln, sched):
@@ -17,7 +24,7 @@ def overlap_fitness_comp(soln, sched):
     # look at each possible pairing of times
     for i in soln:
         for j in soln:
-            delta -= OVERLAP_WEIGHT*Schedulable.calculate_overlap(i, j)
+            delta -= OVERLAP_WEIGHT * Schedulable.calculate_overlap(i, j)
 
     return delta
 
@@ -34,7 +41,7 @@ def ninja_fitness_comp(soln, sched):
         for j in sched.ninja_hours:
             # if the NINJA is right for the class
             if j.cname == i.cname:
-                delta += NINJA_WEIGHT*Schedulable.calculate_overlap(i, j)
+                delta += NINJA_WEIGHT * Schedulable.calculate_overlap(i, j)
 
     return delta
 
@@ -48,7 +55,7 @@ def class_overlap_fitness_comp(soln, sched):
 
     for c in sched.classes:
         for i in soln:
-            delta -= CLASS_WEIGHT*Schedulable.calculate_overlap(c, i)
+            delta -= CLASS_WEIGHT * Schedulable.calculate_overlap(c, i)
 
     return delta
 
@@ -64,7 +71,7 @@ def overdue_fitness_comp(soln, sched):
             # to make this continuous it returns the number of timeblocks overdue an
             # assignment would be
             # TODO: does this need to be different? i dont really know
-            delta -= OVERDUE_WEIGHT*TIMEBLOCKS*(s.day - s.due)
+            delta -= OVERDUE_WEIGHT * TIMEBLOCKS * (s.day - s.due)
 
     return delta
 
@@ -77,13 +84,15 @@ def hwcnt_fitness_comp(soln, sched):
     # get the difference in the number of homeworks we're supposed to have and the
     # number of UNIQUE homeworks we actually schedule time for, and negatively weight
     # the outcome
-    return -HWCNT_WEIGHT*(len(sched.hws) - len({c.cname for c in soln}))
+    return -HWCNT_WEIGHT * (len(sched.hws) - len({c.cname for c in soln}))
 
 
 # find all the previously-defined fitness functions based on function name
 # this is hackish, but kinda cool. it also has to come after all the function
 # declarations/definitions
 FIT_FUNCS = [fn for name, fn in locals().items() if name.endswith("_fitness_comp")]
+
+
 def fitness(soln, sched):
     """
     Evaluates the fitness of the given solution in the overall fitness landscape.
