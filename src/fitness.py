@@ -3,7 +3,7 @@ A helper file containing all the functions related to fitness calculation.
 
 @authors: Elias and Dieter
 """
-from classes import TODO, Schedulable
+from classes import Schedulable
 
 
 def overlap_fitness_comp(soln):
@@ -38,30 +38,44 @@ def ninja_fitness_comp(soln, ninja_hours):
     return delta
 
 
-def todo_classes_overlap_fitness(soln):
+def class_overlap_fitness_comp(soln, classes):
     """
-    Evaluate the fitness of the given solution based on:
-    - how many classes overlap with any of the TODOs
+    Finds the the duration of time any of the solutions are overlapping with
+    any of the classes and returns the negative sum.
     """
     delta = 0
+
+    for c in classes:
+        for i in soln:
+            delta -= CLASS_WEIGHT*Schedulable.calculate_overlap(c, i)
+
     return delta
 
 
-def todo_duedate_fitness(soln):
+def overdue_fitness_comp(soln):
     """
-    Evaluate the fitness of the given solution based on:
-    - whether or not any of the TODOs come after the assigned due date
+    Returns the negative number of timeblocks every assignment would be if overdue.
     """
     delta = 0
+
+    for s in soln:
+        if s.day >= s.due:
+            # to make this continuous it returns the number of timeblocks overdue an
+            # assignment would be
+            # TODO: does this need to be different? i dont really know
+            delta -= OVERDUE_WEIGHT*TIMEBLOCKS*(s.day - s.due)
+
     return delta
 
-def todo_hwcnt_fitness(soln):
+def hwcnt_fitness_comp(soln, hws):
     """
-    Evaluate the fitness of the given solution based on:
-    -  if any of the homework assignments are missing (multiple TODOs for an assignment)
+    Returns the difference between the number of homeworks that are expected
+    and the number of unique homeworks that are actually scheduled to be completed.
     """
-    delta = 0
-    return delta
+    # get the difference in the number of homeworks we're supposed to have and the
+    # number of UNIQUE homeworks we actually schedule time for, and negatively weight
+    # the outcome
+    return -HWCNT_WEIGHT*(len(hws) - len({c.cname for c in soln}))
 
 
 def fitness(soln):
