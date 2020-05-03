@@ -12,14 +12,6 @@ from classes import *
 # random number generator
 rng = np.random.default_rng()
 
-# tunable paramaters
-CLASS_WEIGHT = 1
-HWCNT_WEIGHT = 1
-OVERLAP_WEIGHT = 1
-OVERDUE_WEIGHT = 1
-NINJA_WEIGHT = 1
-MUTATION_PROB = 0.3
-
 
 def gen_rand_solution(hws):
     """

@@ -1,41 +1,8 @@
 """
-The data models and generic schedulable interface for running the GA.
+Objects for holding all separate and distinct data models.
 
-@author: Elias and Dieter
+@authors: Elias and Dieter
 """
-import numpy as np
-from abc import ABC
-
-NUM_BLOCKS = 2 # how many blocks per hour
-TIMEBLOCKS = 24 * NUM_BLOCKS
-DAYS_PER_WEEK = 7
-
-DAY_MAP = ['S', 'U', 'M', 'T', 'W', 'R', 'F']
-
-
-class Schedulable(ABC):
-    """ A generic interface for data models that have a temporal component. """
-
-    def __init__(self, start, end, days):
-        self.start = start
-        self.end = end
-        self.days = [DAY_MAP.index(d) for d in days]
-
-    def calculate_overlap(s1, s2):
-        """ Calculates the overlap between the date ranges of the two given schedulables. """
-        delta = 0
-
-        # loop through all the possible days and add up all the overlap
-        for d1 in s1.days:
-            for d2 in s2.days:
-                if d1 == d2:
-                    # add the time overlap from the either side of the first event
-                    if s1.start <= s2.end: delta += s2.end - s1.start
-                    if s2.start <= s1.end: delta += s1.end - s2.start
-
-        return delta
-
-
 class Course(Schedulable):
     """ Holds all the information about the class. """
 
@@ -60,7 +27,7 @@ class Assignment:
         self.cuuid = cuuid
         self.duration = duration * NUM_BLOCKS
         self.desc = desc
-        self.due = DAY_MAP.index(duedate)
+        self.due = DAY_MAP[duedate]
 
 
 class TODO(Assignment, Schedulable):
@@ -68,8 +35,7 @@ class TODO(Assignment, Schedulable):
 
     def __init__(self, day, **kwargs, hw):
         end = start + hw.duration
-        super().__init__(days=[day],
-                end=end, cname=hw.cname, duration=hw.duration, desc=hw.desc, duedate=hw.due)
+        super().__init__(days=[day], end=end, cname=hw.cname, duration=hw.duration, desc=hw.desc, duedate=hw.due)
 
     @property
     def day(self):
@@ -89,4 +55,4 @@ class TODO(Assignment, Schedulable):
         # swap and recalculate the respective time ranges
         t1.start, t2.start = t2.start, t1.start
         t1.end = t1.start + t1.duration
-        t2.end = t2.end + t2.duration
+        t2.end = t2.end + t2.duration 
