@@ -12,9 +12,9 @@
   7. do fitness function
     a) how many classes overlap with any of the TODOs [elias]
     b) whether or not any of the TODOs come after the assigned due date [elias]
-    c) whether or not any of the TODOs overlap [dieter]
+✓    c) whether or not any of the TODOs overlap [dieter]
     d) if any of the homework assignments are missing (multiple TODOs for an assignment) [elias]
-    e) if a TODO overlaps with NINJA hours [dieter]
+✓    e) if a TODO overlaps with NINJA hours [dieter]
 	8. experimental design // runtime plotting [dieter]
 	9. report writing
   10. video writing/filming
