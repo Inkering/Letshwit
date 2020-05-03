@@ -16,6 +16,8 @@ rng = np.random.default_rng()
 # tunable paramaters
 CLASS_WEIGHT = 1
 HWCNT_WEIGHT = 1
+OVERLAP_WEIGHT = 1
+NINJA_WEIGHT = 1
 MUTATION_PROB = 0.3
 
 
@@ -46,15 +48,31 @@ def todo_overlap_fitness(soln):
     - whether or not any of the TODOs overlap
     """
     delta = 0
+
+    # look at each possible pairing of times
+    for i in soln:
+        for j in soln:
+            if (i.start <= j.end) and (j.start <= i.end):
+                # overlapping time periods for todo!
+                delta -= OVERLAP_WEIGHT
+
     return delta
 
 
-def todo_NINJA_fitness(soln):
+def todo_NINJA_fitness(soln, ninja_list):
     """
     Evaluate the fitness of the given solution based on:
     - if a TODO overlaps with NINJA hours
     """
     delta = 0
+
+    # check if any todos overlap with NINJA hours
+    for i in soln:
+        for j in ninja_list:
+            if (i.start <= j.end) and (j.start <= i.end):
+                # overlapping time periods for todo//NINJA hours!
+                delta += NINJA_WEIGHT
+
     return delta
 
 
