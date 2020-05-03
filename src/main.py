@@ -1,5 +1,5 @@
 """
-Prototype 1: One day scheduling range with one constraint: class times
+Prototype 2:  Week scheduling range with several constraints
 Authors: Dieter and Elias
 """
 
@@ -7,7 +7,8 @@ import numpy as np
 import random
 import pprint
 import operator
-from classes import *
+from classes import Course, NINJA, Assignment, TODO
+from classes import TIMEBLOCKS, DAYS_PER_WEEK, NUM_BLOCKS
 
 # random number generator
 rng = np.random.default_rng()
@@ -33,7 +34,7 @@ def gen_rand_solution(hws):
         start = np.random.randint(TIMEBLOCKS - hw.duration)
         day = np.random.randint(DAYS_PER_WEEK)
         todo = TODO(start, day, hw)
-        
+
         soln.append(todo)
 
     return soln
@@ -64,7 +65,7 @@ def fitness(soln):
     # enough work or if we're doing too much (mental
     # health is important)
     res -= HWCNT_WEIGHT*abs(n-cnt)
-    
+
     # during work hours is better (9-5)
     res += sum(soln[8*NUM_BLOCKS:16*NUM_BLOCKS])
 
@@ -132,14 +133,14 @@ def run_algorithm(n):
             # select fitest individuals in ordered pairs
             choice_p1 = random.randint(0,split_dec)
             choice_p2 = random.randint(0,split_dec)
-            
+
             while choice_p1 == choice_p2:
                 choice_p2 = random.randint(0,split_dec)
 
             p1 = hw_pop[random.randint(0,split_dec)]
             p2 = hw_pop[random.randint(0,split_dec)]
 
-            child = crossover(p1, p2, classes, hw_num)
+            child = crossover(p1, p2)
 
             hw_pop.append(child)
 
@@ -163,5 +164,3 @@ def run_algorithm(n):
 
 if __name__ == "__main__":
     run_algorithm(100)
-
-
