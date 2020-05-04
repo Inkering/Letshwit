@@ -7,7 +7,7 @@ import numpy as np
 
 
 ## schedule properties
-NUM_BLOCKS = 1  # how many blocks per hour
+NUM_BLOCKS = 2  # how many blocks per hour
 TIMEBLOCKS = 24 * NUM_BLOCKS  # how many blocks per day
 DAYS_PER_WEEK = 7
 
@@ -21,11 +21,11 @@ K_SIZE = 4
 
 
 ## fitness weights
-CLASS_WEIGHT = 1
-HWCNT_WEIGHT = 1
-OVERLAP_WEIGHT = 1
+CLASS_WEIGHT = 50
+HWCNT_WEIGHT = 30
+OVERLAP_WEIGHT = 30
 OVERDUE_WEIGHT = 1
-NINJA_WEIGHT = 1
+NINJA_WEIGHT = 5
 
 
 ## propbabilities

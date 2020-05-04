@@ -5,6 +5,7 @@ Defines the algorithms for selecting, breeding, and mutating individual solution
 """
 import numpy as np
 import random
+import copy
 from tunables import (
     TIMEBLOCKS,
     RNG,
@@ -58,7 +59,7 @@ def crossover(p1, p2):
         p1, p2 = p2, p1
 
     idx = np.random.randint(len(p1))
-    child = p1[:idx] + p2[idx:]
+    child = copy.deepcopy(p1[:idx] + p2[idx:])  # aaaaaaahhhhhhhhhhhhh
     t1 = t2 = None
 
     # select two tasks to mutate across. we have to ensure that we pick two

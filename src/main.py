@@ -17,7 +17,7 @@ from tunables import (
     INV_DAY_MAP,
 )
 from models import TODO, Individual
-from fitness import fitness
+from fitness import *
 from generics import Schedule
 from data_importer import load_classes, load_homework, load_ninja_hrs, tprint
 from breed import tournament, crossover
@@ -57,7 +57,7 @@ def gen_rand_solution(hws):
 
 def print_soln(best, craw, hraw, nraw):
     """ pretty print the solution """
-    calendar = pd.DataFrame(index=range(48), columns=range(7))
+    calendar = pd.DataFrame(index=range(TIMEBLOCKS), columns=range(7))
     calendar.columns = pd.Series(["S", "U", "M", "T", "W", "R", "F"])
 
     count_overlap = 0
@@ -111,7 +111,7 @@ def print_soln(best, craw, hraw, nraw):
         bcolors.FAIL + "conflict" + bcolors.ENDC,
         bcolors.UNDERLINE + "due date wrong" + bcolors.ENDC,
         bcolors.HEADER + "homework correct" + bcolors.ENDC,
-        "\n"
+        "\n",
     )
     tprint("Calendar", calendar)
     print(
@@ -179,6 +179,11 @@ def run_algorithm(n):
     )
 
     print_soln(best, craw, hraw, nraw)
+    print("overlap:", overlap_fitness_comp(best.soln, sched))
+    print("ninja:", ninja_fitness_comp(best.soln, sched))
+    print("class:", class_overlap_fitness_comp(best.soln, sched))
+    print("overdue:", overdue_fitness_comp(best.soln, sched))
+    print("hwcnt:", hwcnt_fitness_comp(best.soln, sched))
 
 
 if __name__ == "__main__":

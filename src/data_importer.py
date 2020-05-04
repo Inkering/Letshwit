@@ -15,17 +15,17 @@ def day_parse(row):
     # handler for if S//U column doesn't exist?
     if row["S"] == 1:
         days.append("S")
-    elif row["U"] == 1:
+    if row["U"] == 1:
         days.append("U")
-    elif row["M"] == 1:
+    if row["M"] == 1:
         days.append("M")
-    elif row["T"] == 1:
+    if row["T"] == 1:
         days.append("T")
-    elif row["W"] == 1:
+    if row["W"] == 1:
         days.append("W")
-    elif row["TH"] == 1:
-        days.append("TH")
-    elif row["F"] == 1:
+    if row["R"] == 1:
+        days.append("R")
+    if row["F"] == 1:
         days.append("F")
 
     return days

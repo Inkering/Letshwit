@@ -24,7 +24,8 @@ def overlap_fitness_comp(soln, sched):
     # look at each possible pairing of times
     for i in soln:
         for j in soln:
-            delta -= OVERLAP_WEIGHT * Schedulable.calculate_overlap(i, j)
+            if i is not j:
+                delta -= OVERLAP_WEIGHT * Schedulable.calculate_overlap(i, j)
 
     return delta
 
@@ -53,9 +54,9 @@ def class_overlap_fitness_comp(soln, sched):
     """
     delta = 0
 
-    for c in sched.classes:
-        for i in soln:
-            delta -= CLASS_WEIGHT * Schedulable.calculate_overlap(c, i)
+    for i in soln:
+        for c in sched.classes:
+            delta -= CLASS_WEIGHT * Schedulable.calculate_overlap(i, c)
 
     return delta
 
@@ -68,10 +69,7 @@ def overdue_fitness_comp(soln, sched):
 
     for s in soln:
         if s.day >= s.hw.due:
-            # to make this continuous it returns the number of timeblocks overdue an
-            # assignment would be
-            # TODO: does this need to be different? i dont really know
-            delta -= OVERDUE_WEIGHT * TIMEBLOCKS * (s.day - s.hw.due)
+            delta -= OVERDUE_WEIGHT * TIMEBLOCKS * (s.day - s.hw.due + 1)
 
     return delta
 
@@ -90,7 +88,7 @@ def hwcnt_fitness_comp(soln, sched):
 # find all the previously-defined fitness functions based on function name
 # this is hackish, but kinda cool. it also has to come after all the function
 # declarations/definitions
-FIT_FUNCS = [fn for name, fn in locals().items() if name.endswith("_fitness_comp")]
+# FIT_FUNCS = [fn for name, fn in locals().items() if name.endswith("_fitness_comp")]
 
 
 def fitness(soln, sched):
@@ -99,4 +97,11 @@ def fitness(soln, sched):
     A solution's fitness is calculated based on the sum of all the fitness functions
     defined in this file (collected dynamically).
     """
-    return sum([fn(soln, sched) for fn in FIT_FUNCS])
+    return (
+        overlap_fitness_comp(soln, sched)
+        + ninja_fitness_comp(soln, sched)
+        + class_overlap_fitness_comp(soln, sched)
+        + overdue_fitness_comp(soln, sched)
+        + hwcnt_fitness_comp(soln, sched)
+    )
+    # return sum([fn(soln, sched) for fn in FIT_FUNCS])

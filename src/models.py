@@ -39,7 +39,8 @@ class TODO(Schedulable):
     def __init__(self, start, day, hw):
         self.hw = hw
         end = start + hw.duration
-        super().__init__(start=start, end=end, days=[INV_DAY_MAP[day]])
+        days = [INV_DAY_MAP[day]]
+        super().__init__(start=start, end=end, days=days)
 
     @property
     def day(self):
@@ -53,7 +54,7 @@ class TODO(Schedulable):
 
 
 class Individual:
-    """ Representation of an individual in our genetic model"""
+    """ Representation of an individual in our genetic model. """
 
     def __init__(self, soln, fitness):
         self.soln = soln
