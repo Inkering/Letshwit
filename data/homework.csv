@@ -1,4 +1,4 @@
-assignment,due,class,CUUID
-report,R,ModSim,1
-jupyternotebook,F,SoftDes,4
-labreport,F,ISIM,3
+assignment,due,class,duration,description
+report,R,ModSim,1,NA
+jupyternotebook,F,SoftDes,1,NA
+labreport,F,ISIM,1,NA

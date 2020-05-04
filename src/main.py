@@ -8,9 +8,10 @@ import random
 import pprint
 import operator
 
+from tunables import TIMEBLOCKS, DAYS_PER_WEEK, MUTATION_PROB, POP_SIZE
 from models import TODO
-from tunables import TIMEBLOCKS, DAYS_PER_WEEK, MUTATION_PROB
 from fitness import fitness
+from data_importer import load_classes, load_homework,load_ninja_hrs
 
 
 # random number generator
@@ -65,70 +66,86 @@ def crossover(p1, p2):
 
 def run_algorithm(n):
     """
-    run the algorithm with given num of iterations
+    run the genetic algorithm
     n: number of iterations
     """
-    classes = gen_rand_classes()
+    # our course data
+    courses = load_classes("classes.csv")
 
-    # how many assignments do we have to do today
-    hw_num = 4
+    # our homework data
+    homeworks = load_homework("homework.csv")
 
-    # how big to have the population be
-    pop_size = 10
+    # our ninja hours data
+    ninja_hrs = load_ninja_hrs("ninja.csv")
 
-    split = pop_size // 2
-    split_dec = split - 1
-    # generate an initial population
-    hw_pop = []
-    for i in range(pop_size):
-        # fill the populate at gen 0 with individuals
-        soln = gen_rand_solution(hw_num)
-        individual = {"indiv": soln, "fitness": fitness(soln, classes, hw_num)}
-
-        hw_pop.append(individual)
-
-    # sort by fitness, sorted by descending
-    hw_pop.sort(key=operator.itemgetter("fitness"), reverse=True)
-
-    # within iteration number
-    for i in range(n):
-        # trim the list of bad solutions (last 5)
-        del hw_pop[-split:]
-
-        # breed new individuals!
-        for i in range(split):
-            # select fitest individuals in ordered pairs
-            choice_p1 = random.randint(0, split_dec)
-            choice_p2 = random.randint(0, split_dec)
-
-            while choice_p1 == choice_p2:
-                choice_p2 = random.randint(0, split_dec)
-
-            p1 = hw_pop[random.randint(0, split_dec)]
-            p2 = hw_pop[random.randint(0, split_dec)]
-
-            child = crossover(p1, p2)
-
-            hw_pop.append(child)
-
-        hw_pop.sort(key=operator.itemgetter("fitness"), reverse=True)
-        # print(hw_pop[0]["fitness"])
-
-    print(hw_pop[0])
-    print("classes  ", classes)
-
-    # highlight conflicts in solution
-    output = hw_pop[0]["indiv"]
-    for i in range(len(output)):
-        if classes[i] == 1 and classes[i] == output[i]:
-            output[i] = 1
-        else:
-            output[i] = 0
-
-    print("bad      ", output)
-    # print("o hw  schedule", hw, len(hw), "hrs")
-    # print("class schedule", classes, len(classes), "hrs")
-
+    print([item.cname for item in ninja_hrs])
+    pass
 
 if __name__ == "__main__":
     run_algorithm(100)
+
+
+# def run_algorithm(n):
+#     """
+#     run the algorithm with given num of iterations
+#     n: number of iterations
+#     """
+#     classes = gen_rand_classes()
+
+#     # how many assignments do we have to do today
+#     hw_num = 4
+
+#     # how big to have the population be
+#     split = POP_SIZE // 2
+#     split_dec = split - 1
+
+#     # generate an initial population
+#     hw_pop = []
+#     for i in range(POP_SIZE):
+#         # fill the populate at gen 0 with individuals
+#         soln = gen_rand_solution(hw_num)
+#         individual = {"indiv": soln, "fitness": fitness(soln, classes, hw_num)}
+
+#         hw_pop.append(individual)
+
+#     # sort by fitness, sorted by descending
+#     hw_pop.sort(key=operator.itemgetter("fitness"), reverse=True)
+
+#     # run the GA
+#     for i in range(n):
+#         # trim the list of bad solutions (last 5)
+#         del hw_pop[-split:]
+
+#         # breed new individuals!
+#         for i in range(split):
+#             # select fitest individuals in ordered pairs
+#             choice_p1 = random.randint(0, split_dec)
+#             choice_p2 = random.randint(0, split_dec)
+
+#             while choice_p1 == choice_p2:
+#                 choice_p2 = random.randint(0, split_dec)
+
+#             p1 = hw_pop[random.randint(0, split_dec)]
+#             p2 = hw_pop[random.randint(0, split_dec)]
+
+#             child = crossover(p1, p2)
+
+#             hw_pop.append(child)
+
+#         hw_pop.sort(key=operator.itemgetter("fitness"), reverse=True)
+#         # print(hw_pop[0]["fitness"])
+
+#     print(hw_pop[0])
+#     print("classes  ", classes)
+
+#     # highlight conflicts in solution
+#     output = hw_pop[0]["indiv"]
+#     for i in range(len(output)):
+#         if classes[i] == 1 and classes[i] == output[i]:
+#             output[i] = 1
+#         else:
+#             output[i] = 0
+
+#     print("bad      ", output)
+#     # print("o hw  schedule", hw, len(hw), "hrs")
+#     # print("class schedule", classes, len(classes), "hrs")

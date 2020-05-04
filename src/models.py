@@ -3,7 +3,8 @@ Objects for holding all separate and distinct data models.
 
 @authors: Elias and Dieter
 """
-
+from generics import Schedulable
+from tunables import NUM_BLOCKS, DAY_MAP
 
 class Course(Schedulable):
     """ Holds all the information about the class. """
@@ -24,9 +25,8 @@ class NINJAHours(Course):
 class Assignment:
     """ The data model containing the information for homework assignments. """
 
-    def __init__(self, cname, cuuid, duration, desc, duedate):
+    def __init__(self, cname, duration, desc, duedate):
         self.cname = cname
-        self.cuuid = cuuid
         self.duration = duration * NUM_BLOCKS
         self.desc = desc
         self.due = DAY_MAP[duedate]

@@ -11,6 +11,8 @@ DAYS_PER_WEEK = 7
 # mapping of day abbreviation to index (dict for constant-time access)
 DAY_MAP = {"S": 0, "U": 1, "M": 2, "T": 3, "W": 4, "R": 5, "F": 6}
 
+# population details
+POP_SIZE = 10
 
 ## fitness weights
 CLASS_WEIGHT = 1

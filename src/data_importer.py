@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import random
-from classes import Course, NINJA, Assignment, TODO
+from models import Course, NINJAHours, Assignment, TODO
 
 
 def day_parse(row):
@@ -37,9 +37,7 @@ def load_classes(file_name):
 
     for index, row in data.iterrows():
         days = day_parse(row)
-        course = Course(
-            uuid=row["CUUID"], start=row["start-block"], end=row["end-block"], days=days
-        )
+        course = Course(name=row["class"], start=row["start-block"], end=row["end-block"], days=days)
 
         class_list.append(course)
 
@@ -58,14 +56,13 @@ def load_ninja_hrs(file_name):
 
     for index, row in data.iterrows():
         days = day_parse(row)
-        # todo: change column name to ninja-name or something
-        a_ninja = NINJA(
-            nname=row["Class"],
-            uuid=row["CUUID"],
+
+        a_ninja = NINJAHours(
+            ninja=row["name"],
+            name=row["class"],
             start=row["start-block"],
             end=row["end-block"],
-            days=days,
-        )
+            days=days)
 
         ninja_list.append(a_ninja)
 
@@ -83,16 +80,12 @@ def load_homework(file_name):
     homework_list = []
 
     for index, row in data.iterrows():
-        days = day_parse(row)
-        # todo: change column name to ninja-name or something
-        a_assignment = NINJA(
-            cname=row["class"],
-            cuuid=row["CUUID"],
-            desc=row["assignment"],
-            duedate=row[due],
-        )
-        # TODO: add durations column
+        a_assignment = Assignment(
+            cname=row["assignment"],
+            desc=row["description"],
+            duration=row["duration"],
+            duedate=row["due"],)
 
-        home_list.append(a_assignment)
+        homework_list.append(a_assignment)
 
     return homework_list
