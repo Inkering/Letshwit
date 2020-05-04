@@ -59,17 +59,16 @@ def crossover(p1, p2):
         p1, p2 = p2, p1
 
     idx = np.random.randint(len(p1))
-    child = copy.deepcopy(p1[:idx] + p2[idx:])  # aaaaaaahhhhhhhhhhhhh
-    t1 = t2 = None
+    child = p1[:idx] + p2[idx:]
 
-    # select two tasks to mutate across. we have to ensure that we pick two
-    # TODOs that reference different assignments since the assignment object
-    # is shared in memory. if we didn't check, funky stuff might happen
-    while t1 is t2:
-        # pick two random distinct tasks
-        ridx = RNG.choice(len(child), 2, replace=False)
-        t1 = child[ridx[0]]
-        t2 = child[ridx[1]]
+    # pick two random distinct tasks
+    ridx = RNG.choice(len(child), 2, replace=False)
+    t1 = child[ridx[0]]
+    t2 = child[ridx[1]]
+
+    # deepcopy the tasks we're going to mutate
+    t1 = child[ridx[0]] = copy.deepcopy(t1)
+    t2 = child[ridx[1]] = copy.deepcopy(t2)
 
     # mutate across the two tasks
     mutate_across(t1, t2)

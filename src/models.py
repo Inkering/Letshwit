@@ -57,7 +57,7 @@ class TODO(Schedulable):
         """ Overrides __deepcopy__ to preserve the shared assignment attribute. """
         # cache hw
         hw = self.hw
-        del self.__dict__['hw']
+        del self.__dict__['hw'] # remove attribute reference so we don't copy it
 
         # deepcopy and prevent infinite loops
         deepcopy_method = self.__deepcopy__
