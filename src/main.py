@@ -91,6 +91,7 @@ def print_soln(best, craw, hraw, nraw):
         end = i.end
         name = i.hw.desc
         day = INV_DAY_MAP[i.day]
+        # TODO: add seperate color for NINJA hours
         if calendar[day].iloc[start:end].count() > 0:
             count_overlap += 1
             color = bcolors.FAIL

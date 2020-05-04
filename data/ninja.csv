@@ -1,3 +1,5 @@
 name,start-block,end-block,S,U,M,T,W,R,F,class
 Dieter,32,37,0,0,1,0,0,1,0,ModSim
 Elias,27,33,0,1,0,0,1,0,0,SoftDes
+Megan,17,22,1,0,0,0,0,0,0,ISIM
+Megan,33,40,0,0,0,0,1,0,,ISIM
