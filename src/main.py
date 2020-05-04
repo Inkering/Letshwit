@@ -8,9 +8,10 @@ import random
 import pprint
 import operator
 
-from tunables import TIMEBLOCKS, DAYS_PER_WEEK, MUTATION_PROB, POP_SIZE, DAY_MAP
-from models import TODO
+from tunables import TIMEBLOCKS, DAYS_PER_WEEK, MUTATION_PROB, POP_SIZE, DAY_MAP, K_SIZE
+from models import TODO, Individual
 from fitness import fitness
+from generics import Schedule
 from data_importer import load_classes, load_homework,load_ninja_hrs
 
 
@@ -79,15 +80,43 @@ def run_algorithm(n):
     # our ninja hours data
     ninja_hrs = load_ninja_hrs("ninja.csv")
 
-    # generate an initial population of todo individuals
-    individual = gen_rand_solution(homeworks)
+    sched = Schedule(courses, ninja_hrs, homeworks)
 
-    # print([homework.due for homework in homeworks])
-    # print([todo.start for todo in individual])
-    
+    # generate an initial population of todo individuals
+    population = []
+    for i in range(POP_SIZE):
+        soln = gen_rand_solution(homeworks)
+        population.append(Individual(soln, fitness(soln, sched)))
+
+    # print([indiv.fitness for indiv in p0])
+    # sort by fitness
+    population.sort(key=lambda indiv: indiv.fitness, reverse=True)
+    print(population[0].fitness)
+
+    for i in range(n):
+        new_gen = []
+
+        for i in range(POP_SIZE):
+            parents = []
+            while len(parents) != 2:
+                tournament_participants = random.sample(population, K_SIZE)
+                tournament_participants.sort(key=lambda indiv: indiv.fitness, reverse=True)
+                winner = tournament_participants[0]
+                if winner not in parents:
+                    parents.append(winner)
+
+            child_soln = crossover(parents[0].soln, parents[1].soln)
+            child = Individual(child_soln, fitness(child_soln, sched))
+
+            new_gen.append(child)
+
+        population = new_gen
+
+    population.sort(key=lambda indiv: indiv.fitness, reverse=True)
+    print(population[0].fitness)
 
 if __name__ == "__main__":
-    run_algorithm(100)
+    run_algorithm(10)
 
 
 # def run_algorithm(n):

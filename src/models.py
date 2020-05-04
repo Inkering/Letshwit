@@ -37,15 +37,9 @@ class TODO(Assignment, Schedulable):
 
     def __init__(self, start, day, hw):
         end = start + hw.duration
-        # super().__init__(
-        #     start=start,
-        #     end=end,
-        #     days=[day],
-        #     cname=hw.cname,
-        #     duration=hw.duration,
-        #     desc=hw.desc,
-        #     duedate=hw.due,
-        # 
+
+        # note: needed to init super's seperately to avoid mis-initializing
+        #       parameters when using super()
         Assignment.__init__(self,
                             cname=hw.cname,
                             duration=hw.duration,
@@ -77,3 +71,11 @@ class TODO(Assignment, Schedulable):
         t1.start, t2.start = t2.start, t1.start
         t1.end = t1.start + t1.duration
         t2.end = t2.end + t2.duration
+
+
+class Individual():
+    """ Representation of an individual in our genetic model"""
+
+    def __init__(self, soln, fitness):
+        self.soln = soln
+        self.fitness = fitness
