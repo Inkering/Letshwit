@@ -23,12 +23,10 @@ class Schedulable(ABC):
         # loop through all the possible days and add up all the overlap
         for d1 in s1.days:
             for d2 in s2.days:
-                if d1 == d2:
-                    # add the time overlap from the either side of the first event
-                    if s1.start <= s2.end:
-                        delta += s2.end - s1.start
-                    if s2.start <= s1.end:
-                        delta += s1.end - s2.start
+                # if they're on the same day and overlap
+                if d1 == d2 and s2.start <= s1.end and s2.end > s1.start:
+                    # calculate and add the overlapping range
+                    delta += min(s1.end, s2.end) - max(s1.start, s2.start)
 
         return delta
 

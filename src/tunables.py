@@ -7,7 +7,7 @@ import numpy as np
 
 
 ## schedule properties
-NUM_BLOCKS = 2  # how many blocks per hour
+NUM_BLOCKS = 1  # how many blocks per hour
 TIMEBLOCKS = 24 * NUM_BLOCKS  # how many blocks per day
 DAYS_PER_WEEK = 7
 
