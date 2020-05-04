@@ -70,7 +70,8 @@ def print_soln(best, craw, hraw, nraw):
         end = course[1][2]
         # select date range
         for idx, val in course[1].iloc[3:].items():
-            calendar[str(idx)].iloc[start:end] = bcolors.OKGREEN + name + bcolors.ENDC
+            if val == 1:
+                calendar[str(idx)].iloc[start:end] = bcolors.OKGREEN + name + bcolors.ENDC
 
     # fill in ninja hours
     for ninja in nraw.iterrows():
@@ -170,13 +171,13 @@ def run_algorithm(n):
     print([f.fitness for f in population])
 
     print_soln(best, craw, hraw, nraw)
-    print("solution:", [(i.start, i.end) for i in best.soln])
-    print("fitness:", best.fitness)
-    print("  - overlap:", overlap_fitness_comp(best.soln, sched))
-    print("  - ninja:", ninja_fitness_comp(best.soln, sched))
-    print("  - class:", class_overlap_fitness_comp(best.soln, sched))
-    print("  - overdue:", overdue_fitness_comp(best.soln, sched))
-    print("  - hwcnt:", hwcnt_fitness_comp(best.soln, sched))
+    # print("solution:", [(i.start, i.end) for i in best.soln])
+    # print("fitness:", best.fitness)
+    # print("  - overlap:", overlap_fitness_comp(best.soln, sched))
+    # print("  - ninja:", ninja_fitness_comp(best.soln, sched))
+    # print("  - class:", class_overlap_fitness_comp(best.soln, sched))
+    # print("  - overdue:", overdue_fitness_comp(best.soln, sched))
+    # print("  - hwcnt:", hwcnt_fitness_comp(best.soln, sched))
 
 
 if __name__ == "__main__":

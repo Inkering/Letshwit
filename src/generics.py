@@ -19,8 +19,8 @@ class Schedulable(ABC):
         """ Calculates the overlap between the date ranges of the two given schedulables. """
         delta = 0
 
-        if 'cname' in s2.__dict__:
-            print(s2.cname, s2.days)
+        # if 'cname' in s2.__dict__:
+        #     print(s2.cname, s2.days)
 
         # loop through all the possible days and add up all the overlap
         for d1 in s1.days:
