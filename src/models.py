@@ -4,7 +4,7 @@ Objects for holding all separate and distinct data models.
 @authors: Elias and Dieter
 """
 from generics import Schedulable
-from tunables import NUM_BLOCKS, DAY_MAP
+from tunables import NUM_BLOCKS, DAY_MAP, INV_DAY_MAP
 
 class Course(Schedulable):
     """ Holds all the information about the class. """
@@ -37,15 +37,26 @@ class TODO(Assignment, Schedulable):
 
     def __init__(self, start, day, hw):
         end = start + hw.duration
-        super().__init__(
-            start=start,
-            end=end,
-            days=[day],
-            cname=hw.cname,
-            duration=hw.duration,
-            desc=hw.desc,
-            duedate=hw.due,
-        )
+        # super().__init__(
+        #     start=start,
+        #     end=end,
+        #     days=[day],
+        #     cname=hw.cname,
+        #     duration=hw.duration,
+        #     desc=hw.desc,
+        #     duedate=hw.due,
+        # 
+        Assignment.__init__(self,
+                            cname=hw.cname,
+                            duration=hw.duration,
+                            desc=hw.desc,
+                            duedate=INV_DAY_MAP[hw.due])
+
+        Schedulable.__init__(self,
+                            start=start,
+                            end=end,
+                            days=[INV_DAY_MAP[day]],
+                            )
 
     @property
     def day(self):

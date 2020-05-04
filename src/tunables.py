@@ -10,7 +10,7 @@ DAYS_PER_WEEK = 7
 
 # mapping of day abbreviation to index (dict for constant-time access)
 DAY_MAP = {"S": 0, "U": 1, "M": 2, "T": 3, "W": 4, "R": 5, "F": 6}
-
+INV_DAY_MAP = {0: "S",1: "U",2: "M",3: "T",4: "W",5: "R",6: "F"}
 # population details
 POP_SIZE = 10
 

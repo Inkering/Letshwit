@@ -8,7 +8,7 @@ import random
 import pprint
 import operator
 
-from tunables import TIMEBLOCKS, DAYS_PER_WEEK, MUTATION_PROB, POP_SIZE
+from tunables import TIMEBLOCKS, DAYS_PER_WEEK, MUTATION_PROB, POP_SIZE, DAY_MAP
 from models import TODO
 from fitness import fitness
 from data_importer import load_classes, load_homework,load_ninja_hrs
@@ -32,6 +32,7 @@ def gen_rand_solution(hws):
         # random time, but the duration remains the same
         start = np.random.randint(TIMEBLOCKS - hw.duration)
         day = np.random.randint(DAYS_PER_WEEK)
+        # day = random.choice(d)
         todo = TODO(start, day, hw)
 
         soln.append(todo)
@@ -78,8 +79,12 @@ def run_algorithm(n):
     # our ninja hours data
     ninja_hrs = load_ninja_hrs("ninja.csv")
 
-    print([item.cname for item in ninja_hrs])
-    pass
+    # generate an initial population of todo individuals
+    individual = gen_rand_solution(homeworks)
+
+    # print([homework.due for homework in homeworks])
+    # print([todo.start for todo in individual])
+    
 
 if __name__ == "__main__":
     run_algorithm(100)
