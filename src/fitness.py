@@ -85,12 +85,6 @@ def hwcnt_fitness_comp(soln, sched):
     return -HWCNT_WEIGHT * (len(sched.hws) - len({c.hw.cname for c in soln}))
 
 
-# find all the previously-defined fitness functions based on function name
-# this is hackish, but kinda cool. it also has to come after all the function
-# declarations/definitions
-# FIT_FUNCS = [fn for name, fn in locals().items() if name.endswith("_fitness_comp")]
-
-
 def fitness(soln, sched):
     """
     Evaluates the fitness of the given solution in the overall fitness landscape.
@@ -104,4 +98,3 @@ def fitness(soln, sched):
         + overdue_fitness_comp(soln, sched)
         + hwcnt_fitness_comp(soln, sched)
     )
-    # return sum([fn(soln, sched) for fn in FIT_FUNCS])
