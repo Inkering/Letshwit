@@ -57,6 +57,9 @@ def print_soln(best, craw, hraw, nraw):
     calendar = pd.DataFrame(index=range(48), columns=range(7))
     calendar.columns = pd.Series(['S','U','M','T','W','R','F'])
     
+    count_overlap = 0
+    count_due = 0
+
     # fill in classes
     for course in craw.iterrows():
         name = course[1][0]
@@ -83,11 +86,13 @@ def print_soln(best, craw, hraw, nraw):
         name = i.hw.desc
         day = INV_DAY_MAP[i.day]
         if calendar[day].iloc[start:end].count() > 0:
+            count_overlap += 1
             color = bcolors.FAIL
         else:
             color = bcolors.HEADER
 
         if i.day >= i.hw.due:    
+            count_due += 1
             color = bcolors.UNDERLINE
         
         calendar[str(day)].iloc[start:end] = color + name + bcolors.ENDC
@@ -96,6 +101,8 @@ def print_soln(best, craw, hraw, nraw):
 
     print("Key: ", bcolors.OKGREEN + "course" + bcolors.ENDC, bcolors.OKBLUE + "ninja hours" + bcolors.ENDC, bcolors.FAIL + "conflict" + bcolors.ENDC, bcolors.UNDERLINE + "due date wrong" + bcolors.ENDC, bcolors.HEADER + "homework correct" + bcolors.ENDC)
     tprint("Calendar", calendar)
+    print("course overlap conflicts:", count_overlap, "after due date conflict:", count_due)
+
 
 def run_algorithm(n):
     """
