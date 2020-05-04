@@ -1,4 +1,5 @@
 # Letshwit
-A homework scheduler
+A homework scheduler which evolves a todo list for you based on your existing
+appointments and due dates.
 
 ![An example schedule output](./schedule.png)
