@@ -7,6 +7,7 @@ makes it easier than passing around a a dict or multiple variables to all of the
 from abc import ABC  # Easy as 1-2-3!
 from tunables import DAY_MAP
 
+
 class Schedulable(ABC):
     """ A generic interface for data models that have a temporal component. """
 

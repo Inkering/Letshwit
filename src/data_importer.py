@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 import random
+from tabulate import tabulate
+
 from models import Course, NINJAHours, Assignment, TODO
 
 
@@ -25,6 +27,16 @@ def day_parse(row):
     return days
 
 
+def tprint(header, data):
+    """
+    prints the data using tabulate
+    """
+    print("  ", header, ":")
+    print(
+        tabulate(data, headers="keys", showindex="never", tablefmt="fancy_grid"), "\n"
+    )
+
+
 def load_classes(file_name):
     """
     load classes from a unique csv file in the data folder
@@ -33,11 +45,15 @@ def load_classes(file_name):
     path = "../data/" + file_name
     data = pd.read_csv(path)
 
+    tprint("Classes", data)
+
     class_list = []
 
     for index, row in data.iterrows():
         days = day_parse(row)
-        course = Course(name=row["class"], start=row["start-block"], end=row["end-block"], days=days)
+        course = Course(
+            name=row["class"], start=row["start-block"], end=row["end-block"], days=days
+        )
 
         class_list.append(course)
 
@@ -52,6 +68,8 @@ def load_ninja_hrs(file_name):
     path = "../data/" + file_name
     data = pd.read_csv(path)
 
+    tprint("NINJA Hours", data)
+
     ninja_list = []
 
     for index, row in data.iterrows():
@@ -62,7 +80,8 @@ def load_ninja_hrs(file_name):
             name=row["class"],
             start=row["start-block"],
             end=row["end-block"],
-            days=days)
+            days=days,
+        )
 
         ninja_list.append(a_ninja)
 
@@ -77,6 +96,8 @@ def load_homework(file_name):
     path = "../data/" + file_name
     data = pd.read_csv(path)
 
+    tprint("Homeworks", data)
+
     homework_list = []
 
     for index, row in data.iterrows():
@@ -84,7 +105,8 @@ def load_homework(file_name):
             cname=row["assignment"],
             desc=row["description"],
             duration=row["duration"],
-            duedate=row["due"],)
+            duedate=row["due"],
+        )
 
         homework_list.append(a_assignment)
 

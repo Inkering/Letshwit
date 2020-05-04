@@ -40,7 +40,7 @@ def ninja_fitness_comp(soln, sched):
     for i in soln:
         for j in sched.ninja_hours:
             # if the NINJA is right for the class
-            if j.cname == i.cname:
+            if j.cname == i.hw.cname:
                 delta += NINJA_WEIGHT * Schedulable.calculate_overlap(i, j)
 
     return delta
@@ -67,11 +67,11 @@ def overdue_fitness_comp(soln, sched):
     delta = 0
 
     for s in soln:
-        if s.day >= s.due:
+        if s.day >= s.hw.due:
             # to make this continuous it returns the number of timeblocks overdue an
             # assignment would be
             # TODO: does this need to be different? i dont really know
-            delta -= OVERDUE_WEIGHT * TIMEBLOCKS * (s.day - s.due)
+            delta -= OVERDUE_WEIGHT * TIMEBLOCKS * (s.day - s.hw.due)
 
     return delta
 
@@ -84,7 +84,7 @@ def hwcnt_fitness_comp(soln, sched):
     # get the difference in the number of homeworks we're supposed to have and the
     # number of UNIQUE homeworks we actually schedule time for, and negatively weight
     # the outcome
-    return -HWCNT_WEIGHT * (len(sched.hws) - len({c.cname for c in soln}))
+    return -HWCNT_WEIGHT * (len(sched.hws) - len({c.hw.cname for c in soln}))
 
 
 # find all the previously-defined fitness functions based on function name

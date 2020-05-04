@@ -5,14 +5,20 @@ Authors: Dieter and Elias
 
 import numpy as np
 import random
-import pprint
-import operator
 
-from tunables import TIMEBLOCKS, DAYS_PER_WEEK, MUTATION_PROB, POP_SIZE, DAY_MAP, K_SIZE
+from tunables import (
+    TIMEBLOCKS,
+    NUM_BLOCKS,
+    DAYS_PER_WEEK,
+    MUTATION_PROB,
+    POP_SIZE,
+    DAY_MAP,
+    K_SIZE,
+)
 from models import TODO, Individual
 from fitness import fitness
 from generics import Schedule
-from data_importer import load_classes, load_homework,load_ninja_hrs
+from data_importer import load_classes, load_homework, load_ninja_hrs
 
 
 # random number generator
@@ -33,7 +39,6 @@ def gen_rand_solution(hws):
         # random time, but the duration remains the same
         start = np.random.randint(TIMEBLOCKS - hw.duration)
         day = np.random.randint(DAYS_PER_WEEK)
-        # day = random.choice(d)
         todo = TODO(start, day, hw)
 
         soln.append(todo)
@@ -61,9 +66,44 @@ def crossover(p1, p2):
     if random.random() < MUTATION_PROB:
         # pick two random tasks and mutate across their time ranges
         ridx = rng.choice(len(child), 2, replace=False)
-        TODO.mutate_across(child[ridx[0]], child[ridx[1]])
+        t1 = child[ridx[0]]
+        t2 = child[ridx[1]]
+
+        # if we have duplicates, we cannot mutate because of shared memory, and
+        # this would cause super funky stuff to happen
+        if t1 is not t2:
+            TODO.mutate_across(t1, t2)
 
     return child
+
+
+def tournament(population, p=1):
+    """
+    Runs a probabilistic tournament selection with the given population and returns
+    two parents for crossbreeding. The probability that an individual is selected
+    decreases with its fitness value based on the following geometric series:
+    
+        I(s) = ranking when sorted by fitness from high to low
+        P(s) = p(1 - p)^I(s)
+    
+    By default, p=1. Individuals cannot breed with themselves, buy may breed more
+    than once.
+    """
+    parents = []
+
+    while len(parents) < 2:
+        # pull a random sample of size K and sort by fitness in DESC order
+        participants = random.sample(population, K_SIZE)
+        participants.sort(key=lambda i: i.fitness, reverse=True)
+
+        # cycle through the participants and select them with decreasing likelihood
+        # note that this doesn't guarantee that an individual will be chosen when p < 1
+        for i, indiv in enumerate(participants):
+            if random.random() < p * ((1 - p) ** i):
+                parents.append(indiv)
+                break
+
+    return parents
 
 
 def run_algorithm(n):
@@ -71,40 +111,37 @@ def run_algorithm(n):
     run the genetic algorithm
     n: number of iterations
     """
-    # our course data
+
+    print("\n====")
+    print("==== IMPORTED DATA ====")
+    print("====\n")
+
+    # load the courses, homework assignments, and ninja hours
     courses = load_classes("classes.csv")
-
-    # our homework data
     homeworks = load_homework("homework.csv")
-
-    # our ninja hours data
     ninja_hrs = load_ninja_hrs("ninja.csv")
 
+    # store the imported data into a dummy object
     sched = Schedule(courses, ninja_hrs, homeworks)
 
-    # generate an initial population of todo individuals
+    print("\n====")
+    print("==== EVOLUTION ====")
+    print("====\n")
+
+    # generate an initial population of individuals
     population = []
     for i in range(POP_SIZE):
         soln = gen_rand_solution(homeworks)
         population.append(Individual(soln, fitness(soln, sched)))
 
-    # print([indiv.fitness for indiv in p0])
-    # sort by fitness
-    population.sort(key=lambda indiv: indiv.fitness, reverse=True)
-    print(population[0].fitness)
+    print("Ancestors:", [indiv.fitness for indiv in population])
 
+    # evolve over n generations!
     for i in range(n):
         new_gen = []
 
         for i in range(POP_SIZE):
-            parents = []
-            while len(parents) != 2:
-                tournament_participants = random.sample(population, K_SIZE)
-                tournament_participants.sort(key=lambda indiv: indiv.fitness, reverse=True)
-                winner = tournament_participants[0]
-                if winner not in parents:
-                    parents.append(winner)
-
+            parents = tournament(population)
             child_soln = crossover(parents[0].soln, parents[1].soln)
             child = Individual(child_soln, fitness(child_soln, sched))
 
@@ -113,7 +150,18 @@ def run_algorithm(n):
         population = new_gen
 
     population.sort(key=lambda indiv: indiv.fitness, reverse=True)
-    print(population[0].fitness)
+    best = population[0]
+
+    print(
+        "Best <",
+        best.fitness,
+        ">:",
+        [
+            (i.hw.cname, i.day, i.start // NUM_BLOCKS, i.end // NUM_BLOCKS)
+            for i in best.soln
+        ],
+    )
+
 
 if __name__ == "__main__":
     run_algorithm(10)
