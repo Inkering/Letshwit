@@ -3,6 +3,7 @@ Objects for holding all separate and distinct data models.
 
 @authors: Elias and Dieter
 """
+import copy
 from generics import Schedulable
 from tunables import NUM_BLOCKS, DAY_MAP, INV_DAY_MAP
 
@@ -51,6 +52,23 @@ class TODO(Schedulable):
     def day(self, val):
         """ Enables setting the internal day value via a property setter. """
         self.days[0] = val
+    
+    def __deepcopy__(self, memo):
+        """ Overrides __deepcopy__ to preserve the shared assignment attribute. """
+        # cache hw
+        hw = self.hw
+        del self.__dict__['hw']
+
+        # deepcopy and prevent infinite loops
+        deepcopy_method = self.__deepcopy__
+        self.__deepcopy__ = None
+        cp = copy.deepcopy(self, memo)
+        self.__deepcopy__ = deepcopy_method
+
+        # restore cached hw
+        self.hw = cp.hw = hw
+
+        return cp
 
 
 class Individual:
