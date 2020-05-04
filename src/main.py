@@ -4,7 +4,9 @@ Authors: Dieter and Elias
 """
 
 import numpy as np
+import pandas as pd
 import random
+from tabulate import tabulate
 from tunables import (
     TIMEBLOCKS,
     NUM_BLOCKS,
@@ -12,13 +14,23 @@ from tunables import (
     POP_SIZE,
     DAY_MAP,
     K_SIZE,
+    INV_DAY_MAP
 )
 from models import TODO, Individual
 from fitness import fitness
 from generics import Schedule
-from data_importer import load_classes, load_homework, load_ninja_hrs
+from data_importer import load_classes, load_homework, load_ninja_hrs, tprint
 from breed import tournament, crossover
 
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
 
 def gen_rand_solution(hws):
     """
@@ -40,6 +52,50 @@ def gen_rand_solution(hws):
 
     return soln
 
+def print_soln(best, craw, hraw, nraw):
+    """ pretty print the solution """
+    calendar = pd.DataFrame(index=range(48), columns=range(7))
+    calendar.columns = pd.Series(['S','U','M','T','W','R','F'])
+    
+    # fill in classes
+    for course in craw.iterrows():
+        name = course[1][0]
+        start = course[1][1]
+        end = course[1][2]
+        # select date range
+        for idx, val in course[1].iloc[3:].items():
+            calendar[str(idx)].iloc[start:end] = bcolors.OKGREEN + name + bcolors.ENDC
+
+    # fill in ninja hours
+    for ninja in nraw.iterrows():
+        name = ninja[1][0]
+        start = ninja[1][1]
+        end = ninja[1][2]
+        # select date range
+        for idx, val in ninja[1].iloc[3:-1].items():
+            if val == 1:
+                calendar[str(idx)].iloc[start:end] = bcolors.OKBLUE + name + bcolors.ENDC
+
+    # fill in homework 
+    for i in best.soln:
+        start = i.start
+        end = i.end
+        name = i.hw.desc
+        day = INV_DAY_MAP[i.day]
+        if calendar[day].iloc[start:end].count() > 0:
+            color = bcolors.FAIL
+        else:
+            color = bcolors.HEADER
+
+        if i.day >= i.hw.due:    
+            color = bcolors.UNDERLINE
+        
+        calendar[str(day)].iloc[start:end] = color + name + bcolors.ENDC
+
+    calendar.fillna(" ", inplace=True)
+
+    print("Key: ", bcolors.OKGREEN + "course" + bcolors.ENDC, bcolors.OKBLUE + "ninja hours" + bcolors.ENDC, bcolors.FAIL + "conflict" + bcolors.ENDC, bcolors.UNDERLINE + "due date wrong" + bcolors.ENDC, bcolors.HEADER + "homework correct" + bcolors.ENDC)
+    tprint("Calendar", calendar)
 
 def run_algorithm(n):
     """
@@ -52,9 +108,9 @@ def run_algorithm(n):
     print("====\n")
 
     # load the courses, homework assignments, and ninja hours
-    courses = load_classes("classes.csv")
-    homeworks = load_homework("homework.csv")
-    ninja_hrs = load_ninja_hrs("ninja.csv")
+    courses, craw = load_classes("classes.csv")
+    homeworks, hraw= load_homework("homework.csv")
+    ninja_hrs, nraw = load_ninja_hrs("ninja.csv")
 
     # store the imported data into a dummy object
     sched = Schedule(courses, ninja_hrs, homeworks)
@@ -97,6 +153,7 @@ def run_algorithm(n):
         ],
     )
 
+    print_soln(best, craw, hraw, nraw)
 
 if __name__ == "__main__":
     run_algorithm(100)

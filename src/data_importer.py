@@ -61,7 +61,7 @@ def load_classes(file_name):
 
         class_list.append(course)
 
-    return class_list
+    return class_list, data
 
 
 def load_ninja_hrs(file_name):
@@ -89,7 +89,7 @@ def load_ninja_hrs(file_name):
 
         ninja_list.append(a_ninja)
 
-    return ninja_list
+    return ninja_list, data
 
 
 def load_homework(file_name):
@@ -106,7 +106,7 @@ def load_homework(file_name):
 
     for index, row in data.iterrows():
         a_assignment = Assignment(
-            cname=row["assignment"],
+            cname=row["class"],
             desc=row["description"],
             duration=row["duration"],
             duedate=row["due"],
@@ -114,4 +114,4 @@ def load_homework(file_name):
 
         homework_list.append(a_assignment)
 
-    return homework_list
+    return homework_list, data
