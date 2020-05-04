@@ -51,18 +51,6 @@ class TODO(Schedulable):
         """ Enables setting the internal day value via a property setter. """
         self.days[0] = val
 
-    def mutate_across(t1, t2):
-        """ Mutates the two given instances by swapping their assigned completion ranges. """
-        # swap the assigned days
-        t1.day, t2.day = t2.day, t1.day
-
-        # swap and recalculate the respective time ranges
-        # t1.start, t2.start = t2.start, t1.start
-        # t1.end = t1.start + t1.hw.duration
-        # t2.end = t2.end + t2.hw.duration
-
-        # print(t1.start, t1.end, t1.hw.duration, t1.end - t1.start == t1.hw.duration)
-
 
 class Individual:
     """ Representation of an individual in our genetic model"""

@@ -1,16 +1,14 @@
 """
-Prototype 2:  Week scheduling range with several constraints
+Prototype 3:  Week scheduling range with multiple flexible constraints
 Authors: Dieter and Elias
 """
 
 import numpy as np
 import random
-
 from tunables import (
     TIMEBLOCKS,
     NUM_BLOCKS,
     DAYS_PER_WEEK,
-    MUTATION_PROB,
     POP_SIZE,
     DAY_MAP,
     K_SIZE,
@@ -19,10 +17,7 @@ from models import TODO, Individual
 from fitness import fitness
 from generics import Schedule
 from data_importer import load_classes, load_homework, load_ninja_hrs
-
-
-# random number generator
-rng = np.random.default_rng()
+from breed import tournament, crossover
 
 
 def gen_rand_solution(hws):
@@ -44,66 +39,6 @@ def gen_rand_solution(hws):
         soln.append(todo)
 
     return soln
-
-
-def crossover(p1, p2):
-    """
-    Breed two parent solutions together via single-point crossover,
-    randomly returning one of the two offspring.
-    """
-    # single point crossover
-    # we only want one child, so we can either generate
-    # both and select one or randomly swap the parents
-    # so we don't know if we're choosing the first
-    # or second child
-    if random.random() < 0.5:
-        p1, p2 = p2, p1
-
-    idx = np.random.randint(len(p1))
-    child = p1[:idx] + p2[idx:]
-
-    # randomly mutate the solution with a given probability
-    if random.random() < MUTATION_PROB:
-        # pick two random tasks and mutate across their time ranges
-        ridx = rng.choice(len(child), 2, replace=False)
-        t1 = child[ridx[0]]
-        t2 = child[ridx[1]]
-
-        # if we have duplicates, we cannot mutate because of shared memory, and
-        # this would cause super funky stuff to happen
-        if t1 is not t2:
-            TODO.mutate_across(t1, t2)
-
-    return child
-
-
-def tournament(population, p=1):
-    """
-    Runs a probabilistic tournament selection with the given population and returns
-    two parents for crossbreeding. The probability that an individual is selected
-    decreases with its fitness value based on the following geometric series:
-    
-        I(s) = ranking when sorted by fitness from high to low
-        P(s) = p(1 - p)^I(s)
-    
-    By default, p=1. Individuals cannot breed with themselves, buy may breed more
-    than once.
-    """
-    parents = []
-
-    while len(parents) < 2:
-        # pull a random sample of size K and sort by fitness in DESC order
-        participants = random.sample(population, K_SIZE)
-        participants.sort(key=lambda i: i.fitness, reverse=True)
-
-        # cycle through the participants and select them with decreasing likelihood
-        # note that this doesn't guarantee that an individual will be chosen when p < 1
-        for i, indiv in enumerate(participants):
-            if random.random() < p * ((1 - p) ** i):
-                parents.append(indiv)
-                break
-
-    return parents
 
 
 def run_algorithm(n):

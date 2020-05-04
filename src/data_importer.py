@@ -1,8 +1,12 @@
+"""
+Imports and parses data from the supplied CSVs.
+
+@authors: Dieter and Elias
+"""
 import numpy as np
 import pandas as pd
 import random
 from tabulate import tabulate
-
 from models import Course, NINJAHours, Assignment, TODO
 
 
