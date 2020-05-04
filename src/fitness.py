@@ -89,7 +89,7 @@ def fitness(soln, sched):
     """
     Evaluates the fitness of the given solution in the overall fitness landscape.
     A solution's fitness is calculated based on the sum of all the fitness functions
-    defined in this file (collected dynamically).
+    defined in this file.
     """
     return (
         overlap_fitness_comp(soln, sched)

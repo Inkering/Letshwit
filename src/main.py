@@ -167,23 +167,16 @@ def run_algorithm(n):
 
     population.sort(key=lambda indiv: indiv.fitness, reverse=True)
     best = population[0]
-
-    print(
-        "Best <",
-        best.fitness,
-        ">:",
-        [
-            (i.hw.cname, i.day, i.start // NUM_BLOCKS, i.end // NUM_BLOCKS)
-            for i in best.soln
-        ],
-    )
+    print([f.fitness for f in population])
 
     print_soln(best, craw, hraw, nraw)
-    print("overlap:", overlap_fitness_comp(best.soln, sched))
-    print("ninja:", ninja_fitness_comp(best.soln, sched))
-    print("class:", class_overlap_fitness_comp(best.soln, sched))
-    print("overdue:", overdue_fitness_comp(best.soln, sched))
-    print("hwcnt:", hwcnt_fitness_comp(best.soln, sched))
+    print("solution:", [(i.start, i.end) for i in best.soln])
+    print("fitness:", best.fitness)
+    print("  - overlap:", overlap_fitness_comp(best.soln, sched))
+    print("  - ninja:", ninja_fitness_comp(best.soln, sched))
+    print("  - class:", class_overlap_fitness_comp(best.soln, sched))
+    print("  - overdue:", overdue_fitness_comp(best.soln, sched))
+    print("  - hwcnt:", hwcnt_fitness_comp(best.soln, sched))
 
 
 if __name__ == "__main__":

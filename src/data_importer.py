@@ -37,7 +37,7 @@ def tprint(header, data):
     """
     print("  ", header, ":")
     print(
-        tabulate(data, headers="keys", showindex="never", tablefmt="fancy_grid"), "\n"
+        tabulate(data, headers="keys", tablefmt="fancy_grid"), "\n"
     )
 
 
