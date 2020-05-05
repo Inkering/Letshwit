@@ -2,18 +2,22 @@
 title: "An Evolutionary Approach to Timetabling"
 author: Dieter Brehm & Elias Gabriel
 date: 2 May 2020
+bibliography: sources.bib
 header-includes: |
     \usepackage{amsmath}
+	\usepackage{url}
 ---
 
 # An Evolutionary Approach to Timetabling
 
-by Elias Gabriel and Dieter Brehm
+## Introduction
+
+We constructed an easy to use study scheduling tool to assist students in managing their homework. It is based around genetic algorithm techniques, which are a subclass of evolutionary algorithm.
 
 ## Background
 
 Evolutionary algorithms are different from raw implementations of solutions, and are a subset of optimization problems that derive strategies from
-real world speciation and evolution. As opposed to building globally-optimal strageties or combining locally-optimal ones, evolutionary algorithsm
+real world speciation and evolution. As opposed to building globally-optimal strategies or combining locally-optimal ones, evolutionary algorithms
 adjust and adapt their current solutions over many generations to best fit some pre-defined desired goal. The process is intended to follow
 evolutionary theory, where a species adapts its genepool over time to best match environmental conditions and maximize liklihood of survival.
 
@@ -21,6 +25,10 @@ Genetic algorithms phrase solution-finding in terms of those natural adaptive st
 are all progressive generations on some defined common ancestor, are ranked based on their position in some "fitness landscape." In the nature, the
 fitness function is most often the liklihood to survive and procreate. In the case of homebrew algorithms that fitness could be anything, like
 "how far a robot moves before falling."
+
+These differ from typical gradient descent or astar path finding algorithms (See [@amit-astar]) in that we are not evaluating a gradient in order to determine a direction to move towards, but simply trusting that evolutionary processes will result in a fitness improvement.
+
+In *similarity* to path finding algorithms, this process is done through heuristic methods which find approximations of a solution (See [@amit-heuristic] and [@heuristics] for more.)
 
 ## Problem Space
 
@@ -42,12 +50,11 @@ Most implementations of genetic algorithms utilize list-based structures to assi
 We ran the program through a set of real-life course and homework sets and also through randomly generated requirements to assess the real world suitability of the system along with suitable stress testing of it.
 
 ## Conclusions
-
 ## References
 
 An overview of the A* algorithm:
 <https://theory.stanford.edu/~amitp/GameProgramming/AStarComparison.html>. This
-will help build our foundational knowledge on heuristic-based path finding.
+will help build our foundational knowledge on heuristic-based path finding. 
 
 A heuristic-based approach to optimal path
 finding:<https://theory.stanford.edu/~amitp/GameProgramming/Heuristics.html>. We
@@ -60,4 +67,3 @@ Algorithms like A* do not guarantee that they’ll find the globally best
 solution, but do guarantee that they’ll find the best solution for the given
 heuristic functions. Therefore, resources like these will be critical in
 learning more about how to select better and more optimal functions.
-
