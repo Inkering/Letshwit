@@ -5,7 +5,7 @@ Objects for holding all separate and distinct data models.
 """
 import copy
 from generics import Schedulable
-from tunables import NUM_BLOCKS, DAY_MAP, INV_DAY_MAP
+from tunables import NUM_BLOCKS
 
 
 class Course(Schedulable):
@@ -13,6 +13,9 @@ class Course(Schedulable):
 
     def __init__(self, name, **kwargs):
         self.cname = name
+        # convert 24hr to timeblock
+        kwargs["start"] *= NUM_BLOCKS
+        kwargs["end"] *= NUM_BLOCKS
         super().__init__(**kwargs)
 
 
@@ -27,11 +30,11 @@ class NINJAHours(Course):
 class Assignment:
     """ The data model containing the information for homework assignments. """
 
-    def __init__(self, cname, duration, desc, duedate):
+    def __init__(self, cname, duration, desc, due):
         self.cname = cname
         self.duration = duration * NUM_BLOCKS
         self.desc = desc
-        self.due = DAY_MAP[duedate]
+        self.due = due
 
 
 class TODO(Schedulable):
@@ -40,8 +43,7 @@ class TODO(Schedulable):
     def __init__(self, start, day, hw):
         self.hw = hw
         end = start + hw.duration
-        days = [INV_DAY_MAP[day]]
-        super().__init__(start=start, end=end, days=days)
+        super().__init__(start=start, end=end, days=[day])
 
     @property
     def day(self):
@@ -74,6 +76,6 @@ class TODO(Schedulable):
 class Individual:
     """ Representation of an individual in our genetic model. """
 
-    def __init__(self, soln, fitness):
-        self.soln = soln
+    def __init__(self, todos, fitness):
+        self.todos = todos
         self.fitness = fitness

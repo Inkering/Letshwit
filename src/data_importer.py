@@ -3,16 +3,15 @@ Imports and parses data from the supplied CSVs.
 
 @authors: Dieter and Elias
 """
-import numpy as np
 import pandas as pd
-import random
 from tabulate import tabulate
-from models import Course, NINJAHours, Assignment, TODO
+from models import Course, NINJAHours, Assignment
 
 
+# TODO: refactor this
 def day_parse(row):
     days = []
-    # handler for if S//U column doesn't exist?
+
     if row["S"] == 1:
         days.append("S")
     if row["U"] == 1:
@@ -107,7 +106,7 @@ def load_homework(file_name):
             cname=row["class"],
             desc=row["description"],
             duration=row["duration"],
-            duedate=row["due"],
+            due=row["due"],
         )
 
         homework_list.append(a_assignment)

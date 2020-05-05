@@ -42,7 +42,7 @@ def execute():
     for m in xs:
         ys.append(
             timeit.timeit(
-                "run_algorithm(sched, m=m+5)",
+                "run_algorithm(sched, m=m+2)",
                 setup="from ga import run_algorithm",
                 globals=locals(),
                 number=100,

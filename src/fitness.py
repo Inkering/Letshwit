@@ -3,11 +3,12 @@ A helper file containing all the functions related to fitness calculation.
 
 @authors: Elias and Dieter
 """
-from generics import Schedule, Schedulable
+from generics import Schedulable
 from tunables import (
     OVERLAP_WEIGHT,
     NINJA_WEIGHT,
     CLASS_WEIGHT,
+    DAY_MAP,
     OVERDUE_WEIGHT,
     TIMEBLOCKS,
     HWCNT_WEIGHT,
@@ -40,9 +41,13 @@ def ninja_fitness_comp(soln, sched):
     # check if any todos overlap with NINJA hours
     for i in soln:
         for j in sched.ninja_hours:
-            # if the NINJA is right for the class
-            if j.cname == i.hw.cname:
-                delta += NINJA_WEIGHT * Schedulable.calculate_overlap(i, j)
+            overlap = NINJA_WEIGHT * Schedulable.calculate_overlap(i, j)
+
+            # if the NINJA isn't right for the class
+            if j.cname != i.hw.cname:
+                overlap *= -1
+
+            delta += overlap
 
     return delta
 
@@ -55,7 +60,7 @@ def class_overlap_fitness_comp(soln, sched):
     delta = 0
 
     for i in soln:
-        for c in sched.classes:
+        for c in sched.courses:
             delta -= CLASS_WEIGHT * Schedulable.calculate_overlap(i, c)
 
     return delta
@@ -68,8 +73,11 @@ def overdue_fitness_comp(soln, sched):
     delta = 0
 
     for s in soln:
-        if s.day >= s.hw.due:
-            delta -= OVERDUE_WEIGHT * TIMEBLOCKS * (s.day - s.hw.due + 1)
+        d1 = DAY_MAP[s.day]
+        d2 = DAY_MAP[s.hw.due]
+
+        if d1 >= d2:
+            delta -= OVERDUE_WEIGHT * TIMEBLOCKS * (d1 - d2 + 1)
 
     return delta
 
@@ -82,7 +90,7 @@ def hwcnt_fitness_comp(soln, sched):
     # get the difference in the number of homeworks we're supposed to have and the
     # number of UNIQUE homeworks we actually schedule time for, and negatively weight
     # the outcome
-    return -HWCNT_WEIGHT * (len(sched.hws) - len({c.hw.cname for c in soln}))
+    return -HWCNT_WEIGHT * (len(sched.assignments) - len({c.hw.cname for c in soln}))
 
 
 def fitness(soln, sched):

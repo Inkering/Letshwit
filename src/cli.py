@@ -5,7 +5,7 @@ Wraps and runs the core GA with some pretty CLI outputs.
 """
 import pandas as pd
 from tabulate import tabulate
-from tunables import TIMEBLOCKS, INV_DAY_MAP
+from tunables import TIMEBLOCKS, DAYS, DAY_MAP
 from generics import Schedule
 from data_importer import load_classes, load_homework, load_ninja_hrs, tprint
 from fitness import (
@@ -32,7 +32,7 @@ class bcolors:
 def print_soln(best, craw, hraw, nraw):
     """ pretty print the solution """
     calendar = pd.DataFrame(index=range(TIMEBLOCKS), columns=range(7))
-    calendar.columns = pd.Series(["S", "U", "M", "T", "W", "R", "F"])
+    calendar.columns = pd.Series(DAYS)
 
     count_overlap = 0
     count_due = 0
@@ -62,11 +62,12 @@ def print_soln(best, craw, hraw, nraw):
                 )
 
     # fill in homework
-    for i in best.soln:
+    for i in best.todos:
         start = i.start
         end = i.end
         name = i.hw.desc
-        day = INV_DAY_MAP[i.day]
+        day = i.day
+
         # TODO: add seperate color for NINJA hours
         if calendar[day].iloc[start:end].count() > 0:
             count_overlap += 1
@@ -74,7 +75,7 @@ def print_soln(best, craw, hraw, nraw):
         else:
             color = bcolors.HEADER
 
-        if i.day >= i.hw.due:
+        if DAY_MAP[i.day] >= DAY_MAP[i.hw.due]:
             count_due += 1
             color = bcolors.UNDERLINE
 
@@ -123,13 +124,13 @@ def execute():
     best = run_algorithm(sched)
 
     print_soln(best, craw, hraw, nraw)
-    print("solution:", [(i.start, i.end) for i in best.soln])
+    print("solution:", [(i.start, i.end) for i in best.todos])
     print("fitness:", best.fitness)
-    print("  - overlap:", overlap_fitness_comp(best.soln, sched))
-    print("  - ninja:", ninja_fitness_comp(best.soln, sched))
-    print("  - class:", class_overlap_fitness_comp(best.soln, sched))
-    print("  - overdue:", overdue_fitness_comp(best.soln, sched))
-    print("  - hwcnt:", hwcnt_fitness_comp(best.soln, sched))
+    print("  - overlap:", overlap_fitness_comp(best.todos, sched))
+    print("  - ninja:", ninja_fitness_comp(best.todos, sched))
+    print("  - class:", class_overlap_fitness_comp(best.todos, sched))
+    print("  - overdue:", overdue_fitness_comp(best.todos, sched))
+    print("  - hwcnt:", hwcnt_fitness_comp(best.todos, sched))
 
 
 if __name__ == "__main__":

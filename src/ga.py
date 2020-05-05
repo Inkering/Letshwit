@@ -4,8 +4,7 @@ Prototype 3:  Week scheduling range with multiple flexible constraints
 @authors: Dieter and Elias
 """
 
-import numpy as np
-from tunables import TIMEBLOCKS, DAYS_PER_WEEK, POP_SIZE, NUM_GENERATIONS
+from tunables import TIMEBLOCKS, RNG, DAYS, POP_SIZE, NUM_GENERATIONS
 from models import TODO, Individual
 from fitness import fitness
 from breed import tournament, crossover
@@ -23,8 +22,8 @@ def gen_rand_solution(hws):
     for hw in hws:
         # the random todo occurs on a random day at a
         # random time, but the duration remains the same
-        start = np.random.randint(TIMEBLOCKS - hw.duration)
-        day = np.random.randint(DAYS_PER_WEEK)
+        start = RNG.integers(TIMEBLOCKS - hw.duration)
+        day = RNG.choice(DAYS)
         todo = TODO(start, day, hw)
 
         soln.append(todo)
@@ -41,7 +40,7 @@ def run_algorithm(sched, n=NUM_GENERATIONS, m=POP_SIZE):
     # generate an initial population of individuals
     population = []
     for i in range(m):
-        soln = gen_rand_solution(sched.hws)
+        soln = gen_rand_solution(sched.assignments)
         population.append(Individual(soln, fitness(soln, sched)))
 
     # evolve over n generations!
@@ -52,7 +51,7 @@ def run_algorithm(sched, n=NUM_GENERATIONS, m=POP_SIZE):
             # select 2 parents via tournament selection and breed them to
             # create a child for the new generation
             parents = tournament(population)
-            child_soln = crossover(parents[0].soln, parents[1].soln)
+            child_soln = crossover(parents[0].todos, parents[1].todos)
             child = Individual(child_soln, fitness(child_soln, sched))
 
             new_gen.append(child)
