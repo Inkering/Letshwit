@@ -73,8 +73,6 @@ With that wrapper, we're able to put a collection of TODOs into a set and crosso
 
 We ran an experiment to determine the temporal runtime performance of the application through a range of population sizes and iteration numbers.
 
-* Plot of runtime data
-
 The optimality of a solution produced by the program is determined by several factors specific to the homework scheduling constraints. For a particular homework, it should not be scheduled after or on its due date. Additionally, no homework should be scheduled during class times or other recreational periods (sleep, meals as represented in the model.) Our fitness function also prefers solutions which schedule solutions in the same time period as course assistant (NINJA) hours.
 
 ![time versus population size for a 100 iteration run](./pop_time.png)
