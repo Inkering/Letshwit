@@ -118,8 +118,9 @@ def execute():
     sched = Schedule(courses, ninja_hrs, homeworks)
 
     print("\n====")
-    print("==== EVOLUTION ====")
+    print("==== RUNNING ====")
     print("====\n")
+    print("Evolving your ideal schedule...")
 
     best = run_algorithm(sched)
 
