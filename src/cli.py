@@ -1,26 +1,21 @@
 """
-Prototype 3:  Week scheduling range with multiple flexible constraints
-Authors: Dieter and Elias
-"""
+Wraps and runs the core GA with some pretty CLI outputs.
 
-import numpy as np
+@authors: Dieter and Elias
+"""
 import pandas as pd
-import random
 from tabulate import tabulate
-from tunables import (
-    TIMEBLOCKS,
-    NUM_BLOCKS,
-    DAYS_PER_WEEK,
-    POP_SIZE,
-    DAY_MAP,
-    K_SIZE,
-    INV_DAY_MAP,
-)
-from models import TODO, Individual
-from fitness import *
+from tunables import TIMEBLOCKS, INV_DAY_MAP
 from generics import Schedule
 from data_importer import load_classes, load_homework, load_ninja_hrs, tprint
-from breed import tournament, crossover
+from fitness import (
+    overlap_fitness_comp,
+    ninja_fitness_comp,
+    class_overlap_fitness_comp,
+    overdue_fitness_comp,
+    hwcnt_fitness_comp,
+)
+from ga import run_algorithm
 
 
 class bcolors:
@@ -32,27 +27,6 @@ class bcolors:
     ENDC = "\033[0m"
     BOLD = "\033[1m"
     UNDERLINE = "\033[4m"
-
-
-def gen_rand_solution(hws):
-    """
-    Generate a random solution for the scheduling problem, which is just
-    a list of n TODOs. The number of TODOs is always equal to the number
-    of homework assignments.
-    """
-    soln = []
-
-    # generate a random todo for each homework in the list
-    for hw in hws:
-        # the random todo occurs on a random day at a
-        # random time, but the duration remains the same
-        start = np.random.randint(TIMEBLOCKS - hw.duration)
-        day = np.random.randint(DAYS_PER_WEEK)
-        todo = TODO(start, day, hw)
-
-        soln.append(todo)
-
-    return soln
 
 
 def print_soln(best, craw, hraw, nraw):
@@ -71,7 +45,9 @@ def print_soln(best, craw, hraw, nraw):
         # select date range
         for idx, val in course[1].iloc[3:].items():
             if val == 1:
-                calendar[str(idx)].iloc[start:end] = bcolors.OKGREEN + name + bcolors.ENDC
+                calendar[str(idx)].iloc[start:end] = (
+                    bcolors.OKGREEN + name + bcolors.ENDC
+                )
 
     # fill in ninja hours
     for ninja in nraw.iterrows():
@@ -124,12 +100,10 @@ def print_soln(best, craw, hraw, nraw):
     )
 
 
-def run_algorithm(n):
+def execute():
     """
-    run the genetic algorithm
-    n: number of iterations
+    Runs the main program with useful and pretty terminal outputs.
     """
-
     print("\n====")
     print("==== IMPORTED DATA ====")
     print("====\n")
@@ -146,40 +120,17 @@ def run_algorithm(n):
     print("==== EVOLUTION ====")
     print("====\n")
 
-    # generate an initial population of individuals
-    population = []
-    for i in range(POP_SIZE):
-        soln = gen_rand_solution(homeworks)
-        population.append(Individual(soln, fitness(soln, sched)))
-
-    print("Ancestors:", [indiv.fitness for indiv in population])
-
-    # evolve over n generations!
-    for i in range(n):
-        new_gen = []
-
-        for i in range(POP_SIZE):
-            parents = tournament(population)
-            child_soln = crossover(parents[0].soln, parents[1].soln)
-            child = Individual(child_soln, fitness(child_soln, sched))
-
-            new_gen.append(child)
-
-        population = new_gen
-
-    population.sort(key=lambda indiv: indiv.fitness, reverse=True)
-    best = population[0]
-    print([f.fitness for f in population])
+    best = run_algorithm(sched)
 
     print_soln(best, craw, hraw, nraw)
-    # print("solution:", [(i.start, i.end) for i in best.soln])
-    # print("fitness:", best.fitness)
-    # print("  - overlap:", overlap_fitness_comp(best.soln, sched))
-    # print("  - ninja:", ninja_fitness_comp(best.soln, sched))
-    # print("  - class:", class_overlap_fitness_comp(best.soln, sched))
-    # print("  - overdue:", overdue_fitness_comp(best.soln, sched))
-    # print("  - hwcnt:", hwcnt_fitness_comp(best.soln, sched))
+    print("solution:", [(i.start, i.end) for i in best.soln])
+    print("fitness:", best.fitness)
+    print("  - overlap:", overlap_fitness_comp(best.soln, sched))
+    print("  - ninja:", ninja_fitness_comp(best.soln, sched))
+    print("  - class:", class_overlap_fitness_comp(best.soln, sched))
+    print("  - overdue:", overdue_fitness_comp(best.soln, sched))
+    print("  - hwcnt:", hwcnt_fitness_comp(best.soln, sched))
 
 
 if __name__ == "__main__":
-    run_algorithm(100)
+    execute()

@@ -36,9 +36,7 @@ def tprint(header, data):
     prints the data using tabulate
     """
     print("  ", header, ":")
-    print(
-        tabulate(data, headers="keys", tablefmt="fancy_grid"), "\n"
-    )
+    print(tabulate(data, headers="keys", tablefmt="fancy_grid"), "\n")
 
 
 def load_classes(file_name):
