@@ -16,8 +16,9 @@ DAY_MAP = {"S": 0, "U": 1, "M": 2, "T": 3, "W": 4, "R": 5, "F": 6}
 INV_DAY_MAP = {v: k for k, v in DAY_MAP.items()}
 
 # population details
+NUM_GENERATIONS = 100
 POP_SIZE = 12
-K_SIZE = 4
+K_SIZE = 6
 
 
 ## fitness weights
