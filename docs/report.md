@@ -30,6 +30,10 @@ These differ from typical gradient descent or astar path finding algorithms (See
 
 In *similarity* to path finding algorithms, this process is done through heuristic methods which find approximations of a solution (See [@amit-heuristic] and [@heuristics] for more.)
 
+We first though to use a path finding heuristic setup. We used Amit Patel's fabulous pathfinding website [@amit-astar] for help building our foundational knowledge on heuristic-based path finding. They have another page on the site, found at [@amit-heuristic] which we used to learn more about heuristics in-depth in order to figure out how we may be able to adapt it to our own algorithm.
+
+We eventually found the technique of genetic algorithms promising, so we dove into that. We used established crossover and mutation techniques [@tournament] found through research to construct a model for our system and evolve it.
+
 ## Problem Space
 
 We chose to study the details and implementation surrounding homework scheduling. We implemented a simple genetic homework scheduling system which assists students in optimizing when to study. It can be difficult to balance NINJA hours, class due dates, and lengthy assignments, but using a heuristic-based schedule in the context of time, we will try and give suggestions for how to improve the studying experience. Parameters to our weighting system could includes due dates for specific homework, time entry from the users, when class is happening, ninja-hours optimization, and desired sleeping hours. 
@@ -43,27 +47,14 @@ We decided that segmenting our problem into discrete chunks would be the first s
 
 Most implementations of genetic algorithms utilize list-based structures to assist in simplifying mutation and cross-ing functions. It also makes it easy to manipulate data structures when manipulating entire populations of information. Due to these considerations, we process the most basic time representation in the form of a single hour slot being filled one or zero.
 
-
+![Example result from the scheduling program](./example.png)
 
 ## Examination & Results
 
 We ran the program through a set of real-life course and homework sets and also through randomly generated requirements to assess the real world suitability of the system along with suitable stress testing of it.
 
 ## Conclusions
+
+We successfully implemented a homework scheduler using evolutionary techniques, and tested it across a number of input sizes for performance and optimality.
+
 ## References
-
-An overview of the A* algorithm:
-<https://theory.stanford.edu/~amitp/GameProgramming/AStarComparison.html>. This
-will help build our foundational knowledge on heuristic-based path finding. 
-
-A heuristic-based approach to optimal path
-finding:<https://theory.stanford.edu/~amitp/GameProgramming/Heuristics.html>. We
-need to know about heuristics in-depth in order to figure out how we may be able
-to adapt it to our own algorithm.
- 
-A comprehensive overview of heuristic
-functions:<https://medium.com/@rinu.gour123/heuristic-search-in-artificial-intelligence-python-3087ecfece4d>
-Algorithms like A* do not guarantee that they’ll find the globally best
-solution, but do guarantee that they’ll find the best solution for the given
-heuristic functions. Therefore, resources like these will be critical in
-learning more about how to select better and more optimal functions.
