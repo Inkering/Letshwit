@@ -38,3 +38,7 @@ Once you've installed the prerequisites, simply clone this repository, install t
 You can adjust the schedule and assignment inputs by adjusting the CSVs in the `data` directory. In the future, inputting your own data will be as simple as syncing with Google Calendar or Outlook Calendar.
 
 If you're finding that your proposed solutions could be better, feel free to tweak the algorithmic paramters in `src/tunables.py`. **Make sure you know what you're doing though! Changing things like `TOURAMENT_SIZE` can have unintended (and often negative) consequences.**
+
+## License
+
+This work is licensed under the Creative Commons Attribution-NonCommercial 4.0 International License by Elias Gabriel and Dieter Brehm. To view a copy of this license, visit http://creativecommons.org/licenses/by-nc/4.0/ or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
