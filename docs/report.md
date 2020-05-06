@@ -4,7 +4,7 @@ author: Dieter Brehm & Elias Gabriel
 date: 4 May 2020
 bibliography: sources.bib
 header-includes: |
-	\usepackage[margin=2cm]{geometry}
+	\usepackage[margin=1.5in]{geometry}
 	\usepackage{amsmath}
 	\usepackage{url}
 	\usepackage{float}
@@ -54,24 +54,28 @@ Knowing we would be dealing with a list of TODOs, we implemented several establi
 
 For our crossover (breeding) function, we implemented single-point crossover (SPX). SPX simply picks a random spot between both parents, splits them at it, and then recombines them in an alternating order to create a unique child. As before, there are many options for crossover algorithms, but our research seemed to indicate that SPX adequately and efficiently provided viable solutions.
 
-Mutations are perhaps the most critical step in the entire process of genetic evolution, as they allow children to evolve properties that they might not get from either of their parents. That genetic variation provided a much larger search space over which our fitness function could evaluate solutions, and therefore significantly increased the success of an evolved solution. When designing our mutations, we had to come up with possible ways in which a given solution(s) could gain or lose traits. After thinking, we settled on a list of several possible mutations:
-* swapping the completion day of two distinct solutions
-* swapping the completion time of two distinct solutions
-* randomly altering the start/end time of a random solution
+Mutations are perhaps the most critical step in the entire process of genetic evolution, as they allow children to evolve properties that they might not get from either of their parents. That genetic variation provided a much larger search space over which our fitness function could evaluate solutions, and therefore significantly increased the success of an evolved solution. When designing our mutations, we had to come up with possible ways in which a given solution(s) could gain or lose traits. After thinking, we settled on a list of several possible mutations:  
+
+* swapping the completion day of two distinct solutions  
+* swapping the completion time of two distinct solutions  
+* randomly altering the start/end time of a random solution  
 
 ## Results
 
-We successfully implemented a homework scheduler using the functions above, which yieled fairly promising results. Our entire program was able to generate a solution with no conflicts with existing classes and no overdue assignments.
+We successfully implemented a homework scheduler using the functions above, which yieled fairly promising results. Our entire program was able to generate a solution with no conflicts with existing classes and no overdue assignments. We walk through the results and our program in a recorded video [^2] and the code is open source [^3]. The output of the program is shown in \ref{example}.
 
-![Example result from the scheduling program](./example.png)
+[^2]: https://www.youtube.com/watch?v=hLF6YvrsABU
+[^3]: https://github.com/Inkering/Letshwit
+
+![Example result from the scheduling program \label{example}](./example.png)
 
 ### Experiment
 
-We also ran an experiment to determine the real runtime performance of the application through a range of population and generation sizes. Interestingly, the runtime of our algorithm remained constant with a given problem no matter the population size or number of generations.
+We also ran an experiment to determine the real runtime performance of the application through a range of population and generation sizes. Interestingly, the runtime of our algorithm remained constant with a given problem no matter the population size or number of generations. Figure \ref{pop} shows a plot of time versus population size, and Figure \ref{gen} shows time versus generation number.
 
-![time versus population size for a 100 iteration run](./pop_time.png)
+![time versus population size for a 100 iteration run \label{pop}](./pop_time.png)
 
-![time versus generation number for a 12 population run](./gen_time.png)
+![time versus generation number for a 12 population run \label{gen}](./gen_time.png)
 
 ## Conclusions
 
